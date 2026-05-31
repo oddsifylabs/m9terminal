@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 /**
- * M9 Terminal Dashboard — Modern Monochrome Theme with Updated Side Menu
- * Clean, professional black/white/gray design with contemporary styling
+ * M9 Terminal Dashboard — Modern Monochrome Theme with Footer Menu
+ * Clean, professional black/white/gray design with bottom navigation
  */
 
 const Dashboard = () => {
   const [profile, setProfile] = useState('SHARP');
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState('dashboard');
 
   // Team data with monochrome styling
@@ -42,15 +41,15 @@ const Dashboard = () => {
     { away: 'LAD', home: 'ARI', time: '4:10 PM', opps: '+1' }
   ];
 
-  // Menu items with modern styling
+  // Menu items for footer
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', symbol: '⊙' },
-    { id: 'bet-log', label: 'Bet Log', symbol: '▢' },
-    { id: 'bankroll', label: 'Bankroll', symbol: '◆' },
-    { id: 'daily-debrief', label: 'Daily Debrief', symbol: '≡' },
-    { id: 'news', label: 'News', symbol: '◈' },
-    { id: 'weather', label: 'Weather', symbol: '△' },
-    { id: 'settings', label: 'Settings', symbol: '⚙' }
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'bet-log', label: 'Bet Log' },
+    { id: 'bankroll', label: 'Bankroll' },
+    { id: 'daily-debrief', label: 'Daily Debrief' },
+    { id: 'news', label: 'News' },
+    { id: 'weather', label: 'Weather' },
+    { id: 'settings', label: 'Settings' }
   ];
 
   // Handle scroll to show/hide scroll top button
@@ -303,170 +302,117 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex' }}>
-      {/* Sidebar */}
-      <div
-        style={{
-          width: sidebarOpen ? '200px' : '70px',
-          background: '#0a0a0a',
-          borderRight: '1px solid #0f0f0f',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          zIndex: 100,
-          transition: 'width 0.3s ease',
-          overflowY: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          paddingTop: '1rem'
-        }}
-      >
-        {/* Menu Items */}
-        <div style={{ flex: 1, padding: '0.5rem' }}>
-          {menuItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => setActiveMenu(item.id)}
-              style={{
-                width: '100%',
-                padding: '12px 12px',
-                border: 'none',
-                background: activeMenu === item.id ? 'rgba(143, 220, 35, 0.08)' : 'transparent',
-                color: activeMenu === item.id ? '#8FDC23' : '#606060',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                fontSize: '13px',
-                fontWeight: '400',
-                borderLeft: activeMenu === item.id ? '2px solid #8FDC23' : '2px solid transparent',
-                transition: 'all 0.2s ease',
-                margin: '0.15rem 0',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-              }}
-              onMouseEnter={(e) => {
-                if (activeMenu !== item.id) {
-                  e.target.style.color = '#ffffff';
-                  e.target.style.background = 'rgba(255, 255, 255, 0.04)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeMenu !== item.id) {
-                  e.target.style.color = '#606060';
-                  e.target.style.background = 'transparent';
-                }
-              }}
-            >
-              <span style={{ fontSize: '14px', minWidth: '16px', textAlign: 'center' }}>{item.symbol}</span>
-              {sidebarOpen && <span style={{ fontSize: '13px' }}>{item.label}</span>}
-            </button>
-          ))}
-        </div>
-
-        {/* Sidebar Toggle */}
-        <div style={{ padding: '1rem 0.5rem', borderTop: '1px solid #0f0f0f' }}>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            style={{
-              width: '100%',
-              padding: '12px 12px',
-              border: 'none',
-              background: 'transparent',
-              color: '#606060',
-              fontSize: '14px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.2s ease',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.color = '#606060';
-            }}
-          >
-            {sidebarOpen ? '◄' : '►'}
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ marginLeft: sidebarOpen ? '200px' : '70px', flex: 1, transition: 'margin-left 0.3s ease', display: 'flex', flexDirection: 'column' }}>
-        {/* Header */}
-        <header style={{ borderBottom: '1px solid #1a1a1a', background: '#000000', position: 'sticky', top: 0, zIndex: 50 }}>
-          <div style={{ maxWidth: '100%', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-              {/* M9 Logo */}
-              <div style={{ width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg viewBox="0 0 240 120" style={{ width: '100%', height: '100%' }}>
-                  {/* M */}
-                  <text x="20" y="85" fontSize="72" fontWeight="bold" fill="#ffffff" fontFamily="Arial, sans-serif">M</text>
-                  {/* 9 */}
-                  <rect x="110" y="30" width="40" height="40" rx="6" fill="#8FDC23" />
-                  <text x="140" y="70" fontSize="42" fontWeight="bold" fill="#000000" textAnchor="middle" fontFamily="Arial, sans-serif">9</text>
-                </svg>
-              </div>
-              <div>
-                <h1 style={{ fontSize: '24px', fontWeight: '400', margin: 0, letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>M9 TERMINAL</h1>
-                <p style={{ fontSize: '12px', color: '#808080', margin: '4px 0 0 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>MARKET INTELLIGENCE</p>
-              </div>
+    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <header style={{ borderBottom: '1px solid #1a1a1a', background: '#000000', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {/* M9 Logo */}
+            <div style={{ width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg viewBox="0 0 240 120" style={{ width: '100%', height: '100%' }}>
+                {/* M */}
+                <text x="20" y="85" fontSize="72" fontWeight="bold" fill="#ffffff" fontFamily="Arial, sans-serif">M</text>
+                {/* 9 */}
+                <rect x="110" y="30" width="40" height="40" rx="6" fill="#8FDC23" />
+                <text x="140" y="70" fontSize="42" fontWeight="bold" fill="#000000" textAnchor="middle" fontFamily="Arial, sans-serif">9</text>
+              </svg>
             </div>
-
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
-                <button
-                  key={p}
-                  onClick={() => setProfile(p)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    border: profile === p ? '1px solid #ffffff' : '1px solid #333333',
-                    background: profile === p ? '#1a1a1a' : 'transparent',
-                    color: '#ffffff',
-                    cursor: 'pointer',
-                    letterSpacing: '0.5px',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-                  }}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-
-            <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
-          </div>
-        </header>
-
-        {/* Disclaimer */}
-        {showDisclaimer && (
-          <div style={{ background: '#1a1a1a', borderBottom: '1px solid #333333', padding: '1rem' }}>
-            <div style={{ maxWidth: '100%', margin: '0 auto', padding: '0 1rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-              <div style={{ fontSize: '18px', flexShrink: 0, marginTop: '2px' }}>⚠</div>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '13px', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Disclaimer</p>
-                <p style={{ fontSize: '12px', color: '#b0b0b0', margin: 0, lineHeight: '1.5', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-                  M9 Terminal provides analytical insights only. Past performance does not guarantee future results. Sports betting involves risk. Must be 21+. Gamble responsibly.
-                </p>
-              </div>
-              <button onClick={() => setShowDisclaimer(false)} style={{ fontSize: '16px', background: 'none', border: 'none', color: '#808080', cursor: 'pointer', padding: 0, marginTop: '2px' }}>✕</button>
+            <div>
+              <h1 style={{ fontSize: '24px', fontWeight: '400', margin: 0, letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>M9 TERMINAL</h1>
+              <p style={{ fontSize: '12px', color: '#808080', margin: '4px 0 0 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>MARKET INTELLIGENCE</p>
             </div>
           </div>
-        )}
 
-        {/* Page Content */}
-        <main style={{ maxWidth: '100%', margin: '0 auto', padding: '2rem 1rem', flex: 1, overflowY: 'auto' }}>
-          {renderContent()}
-        </main>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
+              <button
+                key={p}
+                onClick={() => setProfile(p)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  border: profile === p ? '1px solid #ffffff' : '1px solid #333333',
+                  background: profile === p ? '#1a1a1a' : 'transparent',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  letterSpacing: '0.5px',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
 
-        {/* Footer */}
-        <footer style={{ borderTop: '1px solid #1a1a1a', background: '#0f0f0f', marginTop: '4rem' }}>
-          <div style={{ maxWidth: '100%', margin: '0 auto', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', marginBottom: '2rem' }}>
+          <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
+        </div>
+      </header>
+
+      {/* Disclaimer */}
+      {showDisclaimer && (
+        <div style={{ background: '#1a1a1a', borderBottom: '1px solid #333333', padding: '1rem' }}>
+          <div style={{ maxWidth: '100%', margin: '0 auto', padding: '0 1rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '18px', flexShrink: 0, marginTop: '2px' }}>⚠</div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: '13px', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Disclaimer</p>
+              <p style={{ fontSize: '12px', color: '#b0b0b0', margin: 0, lineHeight: '1.5', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                M9 Terminal provides analytical insights only. Past performance does not guarantee future results. Sports betting involves risk. Must be 21+. Gamble responsibly.
+              </p>
+            </div>
+            <button onClick={() => setShowDisclaimer(false)} style={{ fontSize: '16px', background: 'none', border: 'none', color: '#808080', cursor: 'pointer', padding: 0, marginTop: '2px' }}>✕</button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - Flex to push footer down */}
+      <main style={{ flex: 1, maxWidth: '100%', margin: '0 auto', padding: '2rem 1rem', overflowY: 'auto', width: '100%' }}>
+        {renderContent()}
+      </main>
+
+      {/* Footer with Navigation Menu */}
+      <footer style={{ borderTop: '1px solid #1a1a1a', background: '#0a0a0a', marginTop: 'auto' }}>
+        {/* Navigation Menu */}
+        <div style={{ borderBottom: '1px solid #1a1a1a', padding: '0 1rem' }}>
+          <div style={{ maxWidth: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '2rem', overflowX: 'auto' }}>
+            {menuItems.map(item => (
+              <button
+                key={item.id}
+                onClick={() => setActiveMenu(item.id)}
+                style={{
+                  padding: '1rem 0',
+                  border: 'none',
+                  background: 'transparent',
+                  color: activeMenu === item.id ? '#8FDC23' : '#606060',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: '400',
+                  borderBottom: activeMenu === item.id ? '2px solid #8FDC23' : '2px solid transparent',
+                  transition: 'all 0.2s ease',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                  whiteSpace: 'nowrap'
+                }}
+                onMouseEnter={(e) => {
+                  if (activeMenu !== item.id) {
+                    e.target.style.color = '#ffffff';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeMenu !== item.id) {
+                    e.target.style.color = '#606060';
+                  }
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer Content */}
+        <div style={{ padding: '2rem 1rem' }}>
+          <div style={{ maxWidth: '100%', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', marginBottom: '2rem' }}>
             <div>
               <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>About</h4>
               <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Professional sports market intelligence. Data-driven analysis. No picks. Process over emotion.</p>
@@ -483,8 +429,8 @@ const Dashboard = () => {
           <div style={{ borderTop: '1px solid #1a1a1a', paddingTop: '1.5rem', textAlign: 'center', fontSize: '11px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
             © 2026 M9 Terminal by Oddsify Labs. All rights reserved.
           </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
 
       {/* Scroll to Top Button */}
       {showScrollTop && (
