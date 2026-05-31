@@ -403,7 +403,7 @@ const Dashboard = () => {
                     </div>
                     <div style={{ textAlign: 'right', marginLeft: '1.5rem' }}>
                       <p style={{ fontSize: '13px', fontWeight: '700', color: '#8FDC23', margin: '0 0 0.25rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.amount}</p>
-                      <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}{bet.odds}</p>
+                      <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.odds}</p>
                       <div style={{ fontSize: '10px', color: '#8FDC23', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>● {bet.status}</div>
                     </div>
                   </div>
