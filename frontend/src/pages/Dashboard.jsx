@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   // Team data with monochrome styling
   const teams = {
@@ -52,6 +53,14 @@ const Dashboard = () => {
     { id: 'settings', label: 'Settings' }
   ];
 
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Handle scroll to show/hide scroll top button
   useEffect(() => {
     const handleScroll = () => {
@@ -71,6 +80,25 @@ const Dashboard = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
+    });
+  };
+
+  // Format time and date
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit',
+      hour12: true 
+    });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
@@ -305,7 +333,8 @@ const Dashboard = () => {
     <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <header style={{ borderBottom: '1px solid #1a1a1a', background: '#000000', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: '100%', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
+          {/* Left: Logo & Title */}
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             {/* M9 Logo */}
             <div style={{ width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -323,30 +352,43 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
-            {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
-              <button
-                key={p}
-                onClick={() => setProfile(p)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  border: profile === p ? '1px solid #ffffff' : '1px solid #333333',
-                  background: profile === p ? '#1a1a1a' : 'transparent',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  letterSpacing: '0.5px',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-                }}
-              >
-                {p}
-              </button>
-            ))}
+          {/* Center: Time & Date */}
+          <div style={{ flex: 1, textAlign: 'center', borderLeft: '1px solid #1a1a1a', borderRight: '1px solid #1a1a1a', paddingLeft: '2rem', paddingRight: '2rem' }}>
+            <p style={{ fontSize: '16px', fontWeight: '600', color: '#8FDC23', margin: '0 0 0.25rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              {formatTime(currentTime)}
+            </p>
+            <p style={{ fontSize: '12px', color: '#808080', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              {formatDate(currentTime)}
+            </p>
           </div>
 
-          <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
+          {/* Right: Profile Tabs & Settings */}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
+                <button
+                  key={p}
+                  onClick={() => setProfile(p)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    border: profile === p ? '1px solid #ffffff' : '1px solid #333333',
+                    background: profile === p ? '#1a1a1a' : 'transparent',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    letterSpacing: '0.5px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+                  }}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
+          </div>
         </div>
       </header>
 
