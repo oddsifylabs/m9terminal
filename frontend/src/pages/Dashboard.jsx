@@ -93,8 +93,15 @@ const Dashboard = () => {
       <header style={{ borderBottom: '1px solid #1a1a1a', background: '#000000', position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: '90rem', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '6px', background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 'bold', fontSize: '18px', border: '1px solid #333333' }}>
-              M9
+            {/* M9 Logo */}
+            <div style={{ width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg viewBox="0 0 240 120" style={{ width: '100%', height: '100%' }}>
+                {/* M */}
+                <text x="20" y="85" fontSize="72" fontWeight="bold" fill="#ffffff" fontFamily="Arial, sans-serif">M</text>
+                {/* 9 */}
+                <rect x="110" y="30" width="40" height="40" rx="6" fill="#8FDC23" />
+                <text x="140" y="70" fontSize="42" fontWeight="bold" fill="#000000" textAnchor="middle" fontFamily="Arial, sans-serif">9</text>
+              </svg>
             </div>
             <div>
               <h1 style={{ fontSize: '24px', fontWeight: '600', margin: 0, letterSpacing: '-0.5px' }}>M9 TERMINAL</h1>
@@ -322,8 +329,7 @@ const Dashboard = () => {
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
             transition: 'all 0.3s ease',
             zIndex: 40,
-            opacity: 0.9,
-            hover: { opacity: 1, background: '#2a2a2a' }
+            opacity: 0.9
           }}
           onMouseEnter={(e) => {
             e.target.style.opacity = '1';
