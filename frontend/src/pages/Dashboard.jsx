@@ -358,9 +358,9 @@ const Dashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
               {/* Summary Cards */}
               {[
-                { label: 'ACCOUNT BALANCE', value: '$50,000', subtext: 'Available', color: '#8FDC23', icon: '💰' },
-                { label: 'TOTAL WAGERED', value: '$5,200', subtext: 'Today', color: '#ffffff', icon: '📊' },
-                { label: 'ROI', value: '+8.4%', subtext: 'This Month', color: '#8FDC23', icon: '📈' }
+                { label: 'ACCOUNT BALANCE', value: '$50,000', subtext: 'Available', color: '#8FDC23', icon: '◈' },
+                { label: 'TOTAL WAGERED', value: '$5,200', subtext: 'Today', color: '#ffffff', icon: '⊔' },
+                { label: 'ROI', value: '+8.4%', subtext: 'This Month', color: '#8FDC23', icon: '▲' }
               ].map((stat, i) => (
                 <Card key={i}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
@@ -382,7 +382,7 @@ const Dashboard = () => {
                     <p style={{ fontSize: '32px', fontWeight: '800', margin: '0 0 0.5rem 0', letterSpacing: '-1px', color: '#8FDC23', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>3</p>
                     <p style={{ fontSize: '12px', color: '#606060', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Pending resolution</p>
                   </div>
-                  <div style={{ fontSize: '36px' }}>🎯</div>
+                  <div style={{ fontSize: '36px' }}>⊙</div>
                 </div>
               </Card>
             </div>
@@ -426,11 +426,11 @@ const Dashboard = () => {
                       {activityLog.map((log, i) => (
                         <div key={i} style={{ display: 'flex', gap: '1rem', paddingBottom: '1.5rem', borderBottom: i < activityLog.length - 1 ? '1px solid #2a2a2a' : 'none' }}>
                           <div style={{ fontSize: '24px', minWidth: '28px', textAlign: 'center' }}>
-                            {log.type === 'bet' && '💰'}
-                            {log.type === 'signal' && '⚡'}
-                            {log.type === 'api' && '🔗'}
-                            {log.type === 'data' && '📊'}
-                            {log.type === 'profile' && '👤'}
+                            {log.type === 'bet' && '◆'}
+                            {log.type === 'signal' && '✦'}
+                            {log.type === 'api' && '⊕'}
+                            {log.type === 'data' && '⟳'}
+                            {log.type === 'profile' && '⬚'}
                           </div>
                           <div style={{ flex: 1 }}>
                             <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{log.action}</p>
