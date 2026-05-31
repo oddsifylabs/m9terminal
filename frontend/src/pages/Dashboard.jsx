@@ -11,6 +11,22 @@ const Dashboard = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedSport, setSelectedSport] = useState('MLB');
+  const [showSportDropdown, setShowSportDropdown] = useState(false);
+
+  // Sports available
+  const sports = [
+    { id: 'MLB', label: 'MLB', fullName: 'Major League Baseball' },
+    { id: 'NBA', label: 'NBA', fullName: 'National Basketball Association' },
+    { id: 'NFL', label: 'NFL', fullName: 'National Football League' },
+    { id: 'NHL', label: 'NHL', fullName: 'National Hockey League' },
+    { id: 'NCAAB', label: 'NCAAB', fullName: 'NCAA Basketball' },
+    { id: 'NCAAF', label: 'NCAAF', fullName: 'NCAA Football' },
+    { id: 'MLS', label: 'MLS', fullName: 'Major League Soccer' },
+    { id: 'WNBA', label: 'WNBA', fullName: 'Women\'s Basketball' },
+    { id: 'MMA', label: 'MMA', fullName: 'Mixed Martial Arts' },
+    { id: 'TENNIS', label: 'TENNIS', fullName: 'Professional Tennis' }
+  ];
 
   // Team data with monochrome styling
   const teams = {
@@ -73,6 +89,18 @@ const Dashboard = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.sport-dropdown')) {
+        setShowSportDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   // Scroll to top function
@@ -362,8 +390,99 @@ const Dashboard = () => {
             </p>
           </div>
 
-          {/* Right: Profile Tabs & Settings */}
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          {/* Right: Sports Dropdown, Profile Tabs & Settings */}
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            {/* Sports Dropdown */}
+            <div className="sport-dropdown" style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowSportDropdown(!showSportDropdown)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  border: '1px solid #8FDC23',
+                  background: 'transparent',
+                  color: '#8FDC23',
+                  cursor: 'pointer',
+                  letterSpacing: '0.5px',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#8FDC23';
+                  e.target.style.color = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'transparent';
+                  e.target.style.color = '#8FDC23';
+                }}
+              >
+                {selectedSport}
+                <span style={{ fontSize: '10px', marginLeft: '4px' }}>▼</span>
+              </button>
+
+              {/* Dropdown Menu */}
+              {showSportDropdown && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '8px',
+                  background: '#1a1a1a',
+                  border: '1px solid #2a2a2a',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+                  zIndex: 1000,
+                  minWidth: '220px',
+                  overflow: 'hidden'
+                }}>
+                  {sports.map((sport) => (
+                    <button
+                      key={sport.id}
+                      onClick={() => {
+                        setSelectedSport(sport.id);
+                        setShowSportDropdown(false);
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        border: 'none',
+                        background: selectedSport === sport.id ? '#2a2a2a' : 'transparent',
+                        color: selectedSport === sport.id ? '#8FDC23' : '#b0b0b0',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        fontWeight: selectedSport === sport.id ? '600' : '400',
+                        textAlign: 'left',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                        transition: 'all 0.2s',
+                        borderLeft: selectedSport === sport.id ? '3px solid #8FDC23' : '3px solid transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedSport !== sport.id) {
+                          e.target.style.background = '#0f0f0f';
+                          e.target.style.color = '#ffffff';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedSport !== sport.id) {
+                          e.target.style.background = 'transparent';
+                          e.target.style.color = '#b0b0b0';
+                        }
+                      }}
+                    >
+                      <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '2px' }}>{sport.label}</div>
+                      <div style={{ fontSize: '10px', color: selectedSport === sport.id ? '#8FDC23' : '#606060' }}>{sport.fullName}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Profile Tabs */}
             <div style={{ display: 'flex', gap: '8px' }}>
               {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
                 <button
@@ -387,6 +506,7 @@ const Dashboard = () => {
               ))}
             </div>
 
+            {/* Settings Icon */}
             <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
           </div>
         </div>
