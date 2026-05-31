@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 /**
- * M9 Terminal Dashboard — Modern Monochrome Theme with Side Menu
- * Clean, professional black/white/gray design
+ * M9 Terminal Dashboard — Modern Monochrome Theme with Updated Side Menu
+ * Clean, professional black/white/gray design with contemporary styling
  */
 
 const Dashboard = () => {
@@ -42,15 +42,15 @@ const Dashboard = () => {
     { away: 'LAD', home: 'ARI', time: '4:10 PM', opps: '+1' }
   ];
 
-  // Menu items
+  // Menu items with modern styling
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊', color: '#808080' },
-    { id: 'bet-log', label: 'Bet Log', icon: '📝', color: '#808080' },
-    { id: 'bankroll', label: 'Bankroll', icon: '💰', color: '#808080' },
-    { id: 'daily-debrief', label: 'Daily Debrief', icon: '📋', color: '#808080' },
-    { id: 'news', label: 'News', icon: '📰', color: '#808080' },
-    { id: 'weather', label: 'Weather', icon: '🌤️', color: '#808080' },
-    { id: 'settings', label: 'Settings', icon: '⚙️', color: '#808080' }
+    { id: 'dashboard', label: 'Dashboard', symbol: '⊙' },
+    { id: 'bet-log', label: 'Bet Log', symbol: '▢' },
+    { id: 'bankroll', label: 'Bankroll', symbol: '◆' },
+    { id: 'daily-debrief', label: 'Daily Debrief', symbol: '≡' },
+    { id: 'news', label: 'News', symbol: '◈' },
+    { id: 'weather', label: 'Weather', symbol: '△' },
+    { id: 'settings', label: 'Settings', symbol: '⚙' }
   ];
 
   // Handle scroll to show/hide scroll top button
@@ -106,8 +106,8 @@ const Dashboard = () => {
       case 'bet-log':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>BET LOG</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Bet Log</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Track all your placed bets here</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>Bet logging coming soon...</p>
             </div>
@@ -116,8 +116,8 @@ const Dashboard = () => {
       case 'bankroll':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>BANKROLL</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Bankroll</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Monitor your bankroll and ROI</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>Bankroll tracking coming soon...</p>
             </div>
@@ -126,8 +126,8 @@ const Dashboard = () => {
       case 'daily-debrief':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>DAILY DEBRIEF</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Daily Debrief</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Daily summary of plays and results</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>Daily debrief coming soon...</p>
             </div>
@@ -136,8 +136,8 @@ const Dashboard = () => {
       case 'news':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>NEWS</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>News</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Latest sports and betting news</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>News feed coming soon...</p>
             </div>
@@ -146,8 +146,8 @@ const Dashboard = () => {
       case 'weather':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>WEATHER</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Weather</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Weather at game venues</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>Weather data coming soon...</p>
             </div>
@@ -156,8 +156,8 @@ const Dashboard = () => {
       case 'settings':
         return (
           <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#ffffff', margin: '0 0 2rem 0' }}>SETTINGS</h2>
-            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '400', color: '#ffffff', margin: '0 0 2rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Settings</h2>
+            <div style={{ color: '#808080', textAlign: 'center', padding: '3rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <p style={{ fontSize: '16px', margin: '0 0 1rem 0' }}>Configure your preferences</p>
               <p style={{ fontSize: '14px', color: '#606060' }}>Settings coming soon...</p>
             </div>
@@ -175,15 +175,15 @@ const Dashboard = () => {
                 { label: 'TOTAL EDGE', value: '+47%' }
               ].map((stat, i) => (
                 <div key={i} style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '8px', padding: '1.25rem', transition: 'all 0.2s' }}>
-                  <p style={{ fontSize: '11px', color: '#606060', margin: '0 0 0.75rem 0', fontWeight: '600', letterSpacing: '0.5px' }}>{stat.label}</p>
-                  <p style={{ fontSize: '28px', fontWeight: '700', margin: 0, letterSpacing: '-1px' }}>{stat.value}</p>
+                  <p style={{ fontSize: '11px', color: '#606060', margin: '0 0 0.75rem 0', fontWeight: '600', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{stat.label}</p>
+                  <p style={{ fontSize: '28px', fontWeight: '700', margin: 0, letterSpacing: '-1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{stat.value}</p>
                 </div>
               ))}
             </div>
 
             {/* Main Game */}
             <div style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '10px', padding: '2.5rem', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', margin: '0 0 2.5rem 0', letterSpacing: '-0.5px' }}>TODAY'S FEATURED MATCHUP</h2>
+              <h2 style={{ fontSize: '18px', fontWeight: '400', color: '#ffffff', margin: '0 0 2.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Featured Matchup</h2>
 
               {games.map(game => (
                 <div key={game.id}>
@@ -193,9 +193,9 @@ const Dashboard = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', minWidth: '160px' }}>
                       <TeamLogo teamCode={game.away} />
                       <div style={{ textAlign: 'center', width: '100%' }}>
-                        <p style={{ fontSize: '13px', fontWeight: '600', color: '#ffffff', margin: '0 0 0.25rem 0' }}>{teams[game.away].name}</p>
-                        <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px' }}>{teams[game.away].code}</p>
-                        <p style={{ fontSize: '10px', color: '#606060', margin: 0 }}>{teams[game.away].ballpark}</p>
+                        <p style={{ fontSize: '13px', fontWeight: '500', color: '#ffffff', margin: '0 0 0.25rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.away].name}</p>
+                        <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.away].code}</p>
+                        <p style={{ fontSize: '10px', color: '#606060', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.away].ballpark}</p>
                       </div>
                     </div>
 
@@ -206,16 +206,16 @@ const Dashboard = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', minWidth: '160px' }}>
                       <TeamLogo teamCode={game.home} />
                       <div style={{ textAlign: 'center', width: '100%' }}>
-                        <p style={{ fontSize: '13px', fontWeight: '600', color: '#ffffff', margin: '0 0 0.25rem 0' }}>{teams[game.home].name}</p>
-                        <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px' }}>{teams[game.home].code}</p>
-                        <p style={{ fontSize: '10px', color: '#606060', margin: 0 }}>{teams[game.home].ballpark}</p>
+                        <p style={{ fontSize: '13px', fontWeight: '500', color: '#ffffff', margin: '0 0 0.25rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.home].name}</p>
+                        <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.home].code}</p>
+                        <p style={{ fontSize: '10px', color: '#606060', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.home].ballpark}</p>
                       </div>
                     </div>
 
                     {/* Game Info */}
                     <div style={{ textAlign: 'right', marginTop: '1rem', minWidth: '140px' }}>
-                      <p style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 0.5rem 0', letterSpacing: '-0.5px' }}>{game.time}</p>
-                      <p style={{ fontSize: '11px', color: '#808080', margin: 0 }}>{game.date}</p>
+                      <p style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 0.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.time}</p>
+                      <p style={{ fontSize: '11px', color: '#808080', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.date}</p>
                     </div>
                   </div>
 
@@ -225,39 +225,39 @@ const Dashboard = () => {
                       <div key={i} style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '8px', padding: '1.5rem', transition: 'all 0.2s' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
                           <div>
-                            <p style={{ fontSize: '10px', fontWeight: '700', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px' }}>{m.type}</p>
-                            <p style={{ fontSize: '32px', fontWeight: '700', margin: 0, letterSpacing: '-1px' }}>{m.confidence}%</p>
+                            <p style={{ fontSize: '10px', fontWeight: '700', color: '#808080', margin: '0 0 0.5rem 0', letterSpacing: '1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.type}</p>
+                            <p style={{ fontSize: '32px', fontWeight: '700', margin: 0, letterSpacing: '-1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.confidence}%</p>
                           </div>
-                          <div style={{ background: '#2a2a2a', color: '#ffffff', padding: '6px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: '700', border: '1px solid #3a3a3a' }}>
+                          <div style={{ background: '#2a2a2a', color: '#ffffff', padding: '6px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: '700', border: '1px solid #3a3a3a', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                             {m.rating}
                           </div>
                         </div>
 
                         <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: '1.25rem', marginBottom: '1.25rem' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500' }}>Pick</span>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>{m.pick}</span>
+                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Pick</span>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.pick}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500' }}>EV</span>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>{m.edge}</span>
+                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>EV</span>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.edge}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500' }}>Odds</span>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>{m.odds}</span>
+                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Odds</span>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.odds}</span>
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500' }}>Book</span>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>{m.book}</span>
+                            <span style={{ fontSize: '11px', color: '#808080', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Book</span>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.book}</span>
                           </div>
                         </div>
 
                         <div style={{ marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #2a2a2a' }}>
-                          <p style={{ fontSize: '10px', color: '#808080', margin: '0 0 0.5rem 0', fontWeight: '500' }}>KELLY SIZE</p>
-                          <p style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>{m.size}</p>
+                          <p style={{ fontSize: '10px', color: '#808080', margin: '0 0 0.5rem 0', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>KELLY SIZE</p>
+                          <p style={{ fontSize: '18px', fontWeight: '700', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{m.size}</p>
                         </div>
 
-                        <button style={{ width: '100%', background: '#1a1a1a', border: '1px solid #3a3a3a', borderRadius: '6px', padding: '10px', fontWeight: '600', cursor: 'pointer', fontSize: '12px', color: '#ffffff', transition: 'all 0.2s', letterSpacing: '0.5px' }}>
+                        <button style={{ width: '100%', background: '#1a1a1a', border: '1px solid #3a3a3a', borderRadius: '6px', padding: '10px', fontWeight: '600', cursor: 'pointer', fontSize: '12px', color: '#ffffff', transition: 'all 0.2s', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                           PLACE BET →
                         </button>
                       </div>
@@ -269,7 +269,7 @@ const Dashboard = () => {
 
             {/* Other Games */}
             <div>
-              <h2 style={{ fontSize: '14px', fontWeight: '600', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px' }}>OTHER GAMES TODAY</h2>
+              <h2 style={{ fontSize: '14px', fontWeight: '400', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Other Games Today</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
                 {otherGames.map((game, i) => (
                   <div key={i} style={{ background: '#0f0f0f', border: '1px solid #1a1a1a', borderRadius: '8px', padding: '1.5rem' }}>
@@ -277,21 +277,21 @@ const Dashboard = () => {
                       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: 1 }}>
                         <TeamLogo teamCode={game.away} />
                         <div>
-                          <p style={{ fontWeight: '600', color: '#ffffff', margin: '0 0 0.25rem 0', fontSize: '12px' }}>{teams[game.away].name}</p>
-                          <p style={{ fontSize: '10px', color: '#808080', margin: 0, letterSpacing: '0.5px' }}>{teams[game.away].code}</p>
+                          <p style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.25rem 0', fontSize: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.away].name}</p>
+                          <p style={{ fontSize: '10px', color: '#808080', margin: 0, letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.away].code}</p>
                         </div>
                       </div>
-                      <div style={{ fontSize: '11px', color: '#808080', fontWeight: '500' }}>{game.time}</div>
+                      <div style={{ fontSize: '11px', color: '#808080', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.time}</div>
                     </div>
                     <div style={{ borderTop: '1px solid #1a1a1a', paddingTop: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem' }}>
                       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: 1 }}>
                         <TeamLogo teamCode={game.home} />
                         <div>
-                          <p style={{ fontWeight: '600', color: '#ffffff', margin: '0 0 0.25rem 0', fontSize: '12px' }}>{teams[game.home].name}</p>
-                          <p style={{ fontSize: '10px', color: '#808080', margin: 0, letterSpacing: '0.5px' }}>{teams[game.home].code}</p>
+                          <p style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.25rem 0', fontSize: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.home].name}</p>
+                          <p style={{ fontSize: '10px', color: '#808080', margin: 0, letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{teams[game.home].code}</p>
                         </div>
                       </div>
-                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff' }}>{game.opps}</div>
+                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.opps}</div>
                     </div>
                   </div>
                 ))}
@@ -303,13 +303,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#ffffff', fontFamily: "'Inter', 'Segoe UI', sans-serif", display: 'flex' }}>
+    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex' }}>
       {/* Sidebar */}
       <div
         style={{
-          width: sidebarOpen ? '240px' : '80px',
-          background: '#000000',
-          borderRight: '1px solid #1a1a1a',
+          width: sidebarOpen ? '200px' : '70px',
+          background: '#0a0a0a',
+          borderRight: '1px solid #0f0f0f',
           height: '100vh',
           position: 'fixed',
           left: 0,
@@ -318,80 +318,84 @@ const Dashboard = () => {
           transition: 'width 0.3s ease',
           overflowY: 'auto',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          paddingTop: '1rem'
         }}
       >
-        {/* Sidebar Header */}
-        <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid #1a1a1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {sidebarOpen && <h3 style={{ margin: 0, fontSize: '12px', fontWeight: '700', letterSpacing: '1px' }}>MENU</h3>}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#808080',
-              fontSize: '18px',
-              cursor: 'pointer',
-              padding: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            {sidebarOpen ? '←' : '→'}
-          </button>
-        </div>
-
         {/* Menu Items */}
-        <div style={{ flex: 1, padding: '1rem 0.5rem' }}>
+        <div style={{ flex: 1, padding: '0.5rem' }}>
           {menuItems.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveMenu(item.id)}
               style={{
                 width: '100%',
-                padding: '12px 1rem',
+                padding: '12px 12px',
                 border: 'none',
-                background: activeMenu === item.id ? '#1a1a1a' : 'transparent',
-                color: activeMenu === item.id ? '#ffffff' : '#808080',
+                background: activeMenu === item.id ? 'rgba(143, 220, 35, 0.08)' : 'transparent',
+                color: activeMenu === item.id ? '#8FDC23' : '#606060',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
+                gap: '12px',
                 fontSize: '13px',
-                fontWeight: activeMenu === item.id ? '600' : '500',
-                borderLeft: activeMenu === item.id ? '3px solid #8FDC23' : '3px solid transparent',
-                transition: 'all 0.2s',
-                margin: '0.25rem 0',
-                fontFamily: 'inherit'
+                fontWeight: '400',
+                borderLeft: activeMenu === item.id ? '2px solid #8FDC23' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                margin: '0.15rem 0',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
               }}
               onMouseEnter={(e) => {
                 if (activeMenu !== item.id) {
-                  e.target.style.background = '#0a0a0a';
                   e.target.style.color = '#ffffff';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.04)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeMenu !== item.id) {
+                  e.target.style.color = '#606060';
                   e.target.style.background = 'transparent';
-                  e.target.style.color = '#808080';
                 }
               }}
             >
-              <span style={{ fontSize: '16px' }}>{item.icon}</span>
-              {sidebarOpen && <span>{item.label}</span>}
+              <span style={{ fontSize: '14px', minWidth: '16px', textAlign: 'center' }}>{item.symbol}</span>
+              {sidebarOpen && <span style={{ fontSize: '13px' }}>{item.label}</span>}
             </button>
           ))}
         </div>
 
-        {/* Sidebar Footer */}
-        <div style={{ padding: '1rem', borderTop: '1px solid #1a1a1a', fontSize: '10px', color: '#606060', textAlign: 'center' }}>
-          {sidebarOpen && <p style={{ margin: 0 }}>© 2026 M9</p>}
+        {/* Sidebar Toggle */}
+        <div style={{ padding: '1rem 0.5rem', borderTop: '1px solid #0f0f0f' }}>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            style={{
+              width: '100%',
+              padding: '12px 12px',
+              border: 'none',
+              background: 'transparent',
+              color: '#606060',
+              fontSize: '14px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = '#606060';
+            }}
+          >
+            {sidebarOpen ? '◄' : '►'}
+          </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ marginLeft: sidebarOpen ? '240px' : '80px', flex: 1, transition: 'margin-left 0.3s ease', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ marginLeft: sidebarOpen ? '200px' : '70px', flex: 1, transition: 'margin-left 0.3s ease', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <header style={{ borderBottom: '1px solid #1a1a1a', background: '#000000', position: 'sticky', top: 0, zIndex: 50 }}>
           <div style={{ maxWidth: '100%', margin: '0 auto', padding: '1.25rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -407,8 +411,8 @@ const Dashboard = () => {
                 </svg>
               </div>
               <div>
-                <h1 style={{ fontSize: '24px', fontWeight: '600', margin: 0, letterSpacing: '-0.5px' }}>M9 TERMINAL</h1>
-                <p style={{ fontSize: '12px', color: '#808080', margin: '4px 0 0 0' }}>MARKET INTELLIGENCE</p>
+                <h1 style={{ fontSize: '24px', fontWeight: '400', margin: 0, letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>M9 TERMINAL</h1>
+                <p style={{ fontSize: '12px', color: '#808080', margin: '4px 0 0 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>MARKET INTELLIGENCE</p>
               </div>
             </div>
 
@@ -421,12 +425,13 @@ const Dashboard = () => {
                     padding: '8px 16px',
                     borderRadius: '6px',
                     fontSize: '12px',
-                    fontWeight: '600',
+                    fontWeight: '400',
                     border: profile === p ? '1px solid #ffffff' : '1px solid #333333',
                     background: profile === p ? '#1a1a1a' : 'transparent',
                     color: '#ffffff',
                     cursor: 'pointer',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
                   }}
                 >
                   {p}
@@ -434,7 +439,7 @@ const Dashboard = () => {
               ))}
             </div>
 
-            <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙️</div>
+            <div style={{ fontSize: '20px', cursor: 'pointer' }}>⚙</div>
           </div>
         </header>
 
@@ -442,10 +447,10 @@ const Dashboard = () => {
         {showDisclaimer && (
           <div style={{ background: '#1a1a1a', borderBottom: '1px solid #333333', padding: '1rem' }}>
             <div style={{ maxWidth: '100%', margin: '0 auto', padding: '0 1rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-              <div style={{ fontSize: '18px', flexShrink: 0, marginTop: '2px' }}>⚠️</div>
+              <div style={{ fontSize: '18px', flexShrink: 0, marginTop: '2px' }}>⚠</div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '13px', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: '600' }}>DISCLAIMER</p>
-                <p style={{ fontSize: '12px', color: '#b0b0b0', margin: 0, lineHeight: '1.5' }}>
+                <p style={{ fontSize: '13px', color: '#ffffff', margin: '0 0 0.25rem 0', fontWeight: '500', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Disclaimer</p>
+                <p style={{ fontSize: '12px', color: '#b0b0b0', margin: 0, lineHeight: '1.5', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                   M9 Terminal provides analytical insights only. Past performance does not guarantee future results. Sports betting involves risk. Must be 21+. Gamble responsibly.
                 </p>
               </div>
@@ -463,19 +468,19 @@ const Dashboard = () => {
         <footer style={{ borderTop: '1px solid #1a1a1a', background: '#0f0f0f', marginTop: '4rem' }}>
           <div style={{ maxWidth: '100%', margin: '0 auto', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', marginBottom: '2rem' }}>
             <div>
-              <h4 style={{ fontWeight: '700', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px' }}>ABOUT</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6' }}>Professional sports market intelligence. Data-driven analysis. No picks. Process over emotion.</p>
+              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>About</h4>
+              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Professional sports market intelligence. Data-driven analysis. No picks. Process over emotion.</p>
             </div>
             <div>
-              <h4 style={{ fontWeight: '700', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px' }}>LEGAL</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6' }}>Past performance ≠ future results. Gambling involves risk. Must be 21+. Gamble responsibly.</p>
+              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Legal</h4>
+              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Past performance ≠ future results. Gambling involves risk. Must be 21+. Gamble responsibly.</p>
             </div>
             <div>
-              <h4 style={{ fontWeight: '700', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px' }}>DATA</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6' }}>Real-time odds via the-odds-api.com • Game data via SportsData.io</p>
+              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Data</h4>
+              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Real-time odds via the-odds-api.com • Game data via SportsData.io</p>
             </div>
           </div>
-          <div style={{ borderTop: '1px solid #1a1a1a', paddingTop: '1.5rem', textAlign: 'center', fontSize: '11px', color: '#606060' }}>
+          <div style={{ borderTop: '1px solid #1a1a1a', paddingTop: '1.5rem', textAlign: 'center', fontSize: '11px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
             © 2026 M9 Terminal by Oddsify Labs. All rights reserved.
           </div>
         </footer>
