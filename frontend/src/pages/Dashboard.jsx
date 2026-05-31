@@ -387,7 +387,93 @@ const Dashboard = () => {
               </Card>
             </div>
 
-            {/* Middle Row: Current Bets (Left) + Activity & API (Right) */}
+            {/* NEW ROW: Odds Movement + Upcoming Games + Sharp Action */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+              {/* Odds Movement Alerts */}
+              <Card>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span>▶</span> Odds Movement
+                </h3>
+                <div style={{ display: 'grid', gap: '1.25rem' }}>
+                  {[
+                    { game: 'NYY vs BOS', line: '-110 → -125', direction: 'down', change: '-15', size: 'SHARP' },
+                    { game: 'LAL vs GSW', line: '+250 → +240', direction: 'up', change: '+10', size: 'PUBLIC' },
+                    { game: 'ATL vs NYM', line: '-3.5 → -5.0', direction: 'down', change: '-1.5', size: 'SHARP' }
+                  ].map((move, i) => (
+                    <div key={i} style={{ borderBottom: i < 2 ? '1px solid #2a2a2a' : 'none', paddingBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                        <div>
+                          <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{move.game}</p>
+                          <p style={{ fontSize: '11px', color: '#808080', margin: '0.5rem 0 0 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{move.line}</p>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '14px', fontWeight: '700', color: move.direction === 'down' ? '#8FDC23' : '#ff6b6b', marginBottom: '0.25rem', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                            {move.direction === 'down' ? '▼' : '▲'} {move.change}
+                          </div>
+                          <p style={{ fontSize: '10px', color: '#606060', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{move.size}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Upcoming Games */}
+              <Card>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span>▷</span> Upcoming Today
+                </h3>
+                <div style={{ display: 'grid', gap: '1.25rem' }}>
+                  {[
+                    { time: '1:10 PM', game: 'NYY @ BOS', ml: '-110', spread: '-3.0', ou: '8.5', status: 'open' },
+                    { time: '4:05 PM', game: 'LAL @ GSW', ml: '+250', spread: '+5.5', ou: '217.5', status: 'open' },
+                    { time: '7:30 PM', game: 'ATL @ NYM', ml: '-120', spread: '-2.5', ou: '7.5', status: 'open' }
+                  ].map((game, i) => (
+                    <div key={i} style={{ borderBottom: i < 2 ? '1px solid #2a2a2a' : 'none', paddingBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                        <div>
+                          <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.game}</p>
+                          <p style={{ fontSize: '11px', color: '#8FDC23', margin: '0.25rem 0 0 0', fontWeight: '700', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{game.time}</p>
+                        </div>
+                        <div style={{ fontSize: '10px', color: '#606060', textAlign: 'right', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                          <div>ML: {game.ml}</div>
+                          <div>Sp: {game.spread}</div>
+                          <div>O/U: {game.ou}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Sharp Action */}
+              <Card>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span>★</span> Sharp Action
+                </h3>
+                <div style={{ display: 'grid', gap: '1.25rem' }}>
+                  {[
+                    { book: 'Sharps', side: 'NYY -3.0', consensus: '61%', move: '→ -5.0', confidence: 'HEAVY' },
+                    { book: 'Public', side: 'BOS +2.5', consensus: '58%', move: '← +2.0', confidence: 'MEDIUM' },
+                    { book: 'Market', side: 'UNDER 8.5', consensus: '52%', move: '→ 8.0', confidence: 'LIGHT' }
+                  ].map((action, i) => (
+                    <div key={i} style={{ borderBottom: i < 2 ? '1px solid #2a2a2a' : 'none', paddingBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                        <div>
+                          <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{action.book}</p>
+                          <p style={{ fontSize: '11px', color: '#8FDC23', margin: '0.25rem 0 0 0', fontWeight: '700', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{action.side}</p>
+                        </div>
+                        <div style={{ textAlign: 'right', fontSize: '11px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                          <div style={{ marginBottom: '0.25rem' }}>{action.consensus}</div>
+                          <div style={{ color: '#8FDC23', fontWeight: '700' }}>{action.move}</div>
+                          <div style={{ fontSize: '10px', marginTop: '0.25rem' }}>{action.confidence}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
               {/* LEFT COLUMN: Current Bets */}
               <div>
