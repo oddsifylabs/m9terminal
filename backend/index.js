@@ -41,6 +41,10 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Routes
+const mlbLiveRoutes = require('./routes/mlb-live');
+app.use('/api/mlb', mlbLiveRoutes);
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
