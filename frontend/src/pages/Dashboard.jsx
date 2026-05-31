@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
  * M9 Terminal Dashboard — Modern Monochrome Theme
@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 const Dashboard = () => {
   const [profile, setProfile] = useState('SHARP');
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Team data with monochrome styling
   const teams = {
@@ -38,6 +39,28 @@ const Dashboard = () => {
     { away: 'ATL', home: 'NYM', time: '1:10 PM', opps: '+2' },
     { away: 'LAD', home: 'ARI', time: '4:10 PM', opps: '+1' }
   ];
+
+  // Handle scroll to show/hide scroll top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const TeamLogo = ({ teamCode }) => {
     const team = teams[teamCode];
@@ -276,6 +299,44 @@ const Dashboard = () => {
           © 2026 M9 Terminal by Oddsify Labs. All rights reserved.
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          style={{
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            width: '50px',
+            height: '50px',
+            borderRadius: '8px',
+            background: '#1a1a1a',
+            border: '1px solid #333333',
+            color: '#ffffff',
+            fontSize: '24px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+            transition: 'all 0.3s ease',
+            zIndex: 40,
+            opacity: 0.9,
+            hover: { opacity: 1, background: '#2a2a2a' }
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.opacity = '1';
+            e.target.style.background = '#2a2a2a';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.opacity = '0.9';
+            e.target.style.background = '#1a1a1a';
+          }}
+        >
+          ↑
+        </button>
+      )}
     </div>
   );
 };
