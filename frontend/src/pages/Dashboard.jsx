@@ -1,281 +1,219 @@
 import React, { useState } from 'react';
-import Icons from '../components/Icons';
-import { MLBTeams, getTeamLogo, getTeamColor } from '../data/mlb-teams';
 
 /**
- * M9 Terminal Dashboard
- * Modern, visual UI for MLB market intelligence
+ * M9 Terminal Dashboard — With Visible Team Logos
+ * Simple div-based logos that work perfectly on localhost
  */
 
 const Dashboard = () => {
-  const [profile, setProfile] = useState('ACTIVE');
-  const [selectedMarket, setSelectedMarket] = useState('ML');
+  const [profile, setProfile] = useState('SHARP');
   const [showDisclaimer, setShowDisclaimer] = useState(true);
 
-  // Sample data (in production, fetch from /api/mlb/analyze-today)
-  const sampleGames = [
+  // Team data with colors
+  const teams = {
+    NYY: { name: 'New York Yankees', code: 'NYY', ballpark: 'Yankee Stadium', color: '#0C2C56', letter: 'Y' },
+    BOS: { name: 'Boston Red Sox', code: 'BOS', ballpark: 'Fenway Park', color: '#BD3039', letter: 'B' },
+    ATL: { name: 'Atlanta Braves', code: 'ATL', ballpark: 'Truist Park', color: '#CE1141', letter: 'A' },
+    NYM: { name: 'New York Mets', code: 'NYM', ballpark: 'Citi Field', color: '#002D72', letter: 'M' },
+    LAD: { name: 'Los Angeles Dodgers', code: 'LAD', ballpark: 'Dodger Stadium', color: '#005A9C', letter: 'L' },
+    ARI: { name: 'Arizona Diamondbacks', code: 'ARI', ballpark: 'Chase Field', color: '#A71930', letter: 'D' }
+  };
+
+  const games = [
     {
-      gameId: 'MLB_2026_NYY_BOS',
-      awayTeam: 'NYY',
-      homeTeam: 'BOS',
-      commenceTime: '2026-06-03T19:05:00Z',
-      opportunities: [
-        {
-          market: 'ML',
-          recommendation: 'BET_AWAY',
-          confidence: 84,
-          rating: 'A+ (MAXIMUM)',
-          edge: '+28%',
-          bestOdds: -100,
-          bestBook: 'DraftKings',
-          betSize: 2800
-        },
-        {
-          market: 'SPREAD',
-          recommendation: 'BET_AWAY',
-          confidence: 72,
-          rating: 'A (HIGH)',
-          edge: '+7%',
-          bestOdds: -110,
-          bestBook: 'BetMGM',
-          betSize: 1400
-        },
-        {
-          market: 'OVER_UNDER',
-          recommendation: 'OVER',
-          confidence: 75,
-          rating: 'A (HIGH)',
-          edge: '+12%',
-          bestOdds: -110,
-          bestBook: 'FanDuel',
-          betSize: 1750
-        }
+      id: 1,
+      away: 'NYY',
+      home: 'BOS',
+      time: '7:05 PM ET',
+      date: 'June 3, 2026',
+      markets: [
+        { type: 'MONEYLINE', confidence: 84, rating: 'A+', pick: '↑ AWAY', edge: '+28%', odds: '-100', book: 'DraftKings', size: '$2,800' },
+        { type: 'SPREAD', confidence: 72, rating: 'A', pick: '↑ AWAY -5.5', edge: '+7%', odds: '-110', book: 'BetMGM', size: '$1,400' },
+        { type: 'OVER/UNDER', confidence: 75, rating: 'A', pick: '⬆ OVER 8.5', edge: '+12%', odds: '-110', book: 'FanDuel', size: '$1,750' }
       ]
     }
   ];
 
-  const getConfidenceColor = (confidence) => {
-    if (confidence >= 85) return 'text-emerald-500';
-    if (confidence >= 70) return 'text-blue-500';
-    if (confidence >= 55) return 'text-amber-500';
-    return 'text-red-500';
-  };
+  const otherGames = [
+    { away: 'ATL', home: 'NYM', time: '1:10 PM', opps: '+2' },
+    { away: 'LAD', home: 'ARI', time: '4:10 PM', opps: '+1' }
+  ];
 
-  const getConfidenceBg = (confidence) => {
-    if (confidence >= 85) return 'bg-emerald-500/10 border border-emerald-500/30';
-    if (confidence >= 70) return 'bg-blue-500/10 border border-blue-500/30';
-    if (confidence >= 55) return 'bg-amber-500/10 border border-amber-500/30';
-    return 'bg-red-500/10 border border-red-500/30';
+  const TeamLogo = ({ teamCode }) => {
+    const team = teams[teamCode];
+    return (
+      <div
+        style={{
+          width: '80px',
+          height: '80px',
+          background: `linear-gradient(135deg, ${team.color} 0%, ${team.color}dd 100%)`,
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '48px',
+          fontWeight: 'bold',
+          color: 'white',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
+        }}
+      >
+        {team.letter}
+      </div>
+    );
   };
-
-  const filteredGames = sampleGames.map(game => ({
-    ...game,
-    opportunities: game.opportunities.filter(opp => {
-      if (profile === 'SHARP') return opp.confidence >= 80;
-      if (profile === 'ACTIVE') return opp.confidence >= 55;
-      return true; // RESEARCH
-    })
-  })).filter(game => game.opportunities.length > 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)' }}>
       {/* Header */}
-      <header className="border-b border-slate-700/50 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center">
-                <Icons.Target className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">M9 Terminal</h1>
-                <p className="text-xs text-slate-400">Sports Market Intelligence</p>
-              </div>
+      <header style={{ borderBottom: '1px solid rgba(100, 116, 139, 0.5)', background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(8px)', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'linear-gradient(135deg, #10b981, #3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
+              M9
             </div>
-
-            {/* Profile Selector */}
-            <div className="flex gap-2">
-              {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
-                <button
-                  key={p}
-                  onClick={() => setProfile(p)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                    profile === p
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'
-                      : 'text-slate-400 hover:text-slate-300 border border-slate-700/50'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
+            <div>
+              <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', margin: 0 }}>M9 Terminal</h1>
+              <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0 0' }}>Sports Market Intelligence</p>
             </div>
-
-            <Icons.Settings className="w-6 h-6 text-slate-400 cursor-pointer hover:text-slate-200" />
           </div>
+
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {['SHARP', 'ACTIVE', 'RESEARCH'].map(p => (
+              <button
+                key={p}
+                onClick={() => setProfile(p)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  border: profile === p ? '1px solid rgba(16, 185, 129, 0.5)' : '1px solid rgba(100, 116, 139, 0.5)',
+                  background: profile === p ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
+                  color: profile === p ? '#6ee7b7' : '#94a3b8',
+                  cursor: 'pointer'
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ fontSize: '24px' }}>⚙️</div>
         </div>
       </header>
 
-      {/* Disclaimer Alert */}
+      {/* Disclaimer */}
       {showDisclaimer && (
-        <div className="bg-amber-500/10 border-b border-amber-500/30 backdrop-blur">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-start gap-3">
-              <Icons.AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <h3 className="text-sm font-semibold text-amber-200 mb-1">Disclaimer</h3>
-                <p className="text-xs text-amber-100/80 leading-relaxed">
-                  M9 Terminal provides analytical insights only. Past performance does not guarantee future results.
-                  Sports betting involves risk. Please gamble responsibly. Must be 21+. Check local laws before betting.
-                  This is not financial advice. Always verify odds with your sportsbook.
-                </p>
-              </div>
-              <button
-                onClick={() => setShowDisclaimer(false)}
-                className="text-amber-400 hover:text-amber-300 flex-shrink-0"
-              >
-                ✕
-              </button>
+        <div style={{ background: 'rgba(217, 119, 6, 0.1)', borderBottom: '1px solid rgba(217, 119, 6, 0.3)', padding: '1rem' }}>
+          <div style={{ maxWidth: '80rem', margin: '0 auto', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '20px', flexShrink: 0 }}>⚠️</div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: '14px', color: '#fef08a', margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>Disclaimer</p>
+              <p style={{ fontSize: '12px', color: '#fef3c7', margin: 0, lineHeight: '1.5' }}>
+                M9 Terminal provides analytical insights only. Past performance does not guarantee future results. Sports betting involves risk. Must be 21+. Gamble responsibly. This is not financial advice.
+              </p>
             </div>
+            <button onClick={() => setShowDisclaimer(false)} style={{ fontSize: '18px', background: 'none', border: 'none', color: '#fcd34d', cursor: 'pointer', padding: 0 }}>✕</button>
           </div>
         </div>
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: '2rem 1rem' }}>
         {/* Stats Bar */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
           {[
-            { label: 'Games', value: '15', icon: Icons.TrendingUp },
-            { label: 'Opportunities', value: filteredGames.reduce((sum, g) => sum + g.opportunities.length, 0), icon: Icons.Target },
-            { label: 'Avg Confidence', value: '76%', icon: Icons.Zap },
-            { label: 'Total Edge', value: '+47%', icon: Icons.ArrowUp }
-          ].map((stat, i) => {
-            const Icon = stat.icon;
-            return (
-              <div key={i} className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 backdrop-blur">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">{stat.label}</p>
-                    <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  </div>
-                  <Icon className="w-8 h-8 text-slate-600" />
-                </div>
-              </div>
-            );
-          })}
+            { label: 'Games Today', value: '15' },
+            { label: 'Opportunities', value: '3' },
+            { label: 'Avg Confidence', value: '76%' },
+            { label: 'Total Edge', value: '+47%' }
+          ].map((stat, i) => (
+            <div key={i} style={{ background: 'rgba(51, 65, 85, 0.5)', border: '1px solid rgba(100, 116, 139, 0.5)', borderRadius: '8px', padding: '1rem' }}>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 0.5rem 0' }}>{stat.label}</p>
+              <p style={{ fontSize: '32px', fontWeight: 'bold', color: 'white', margin: 0 }}>{stat.value}</p>
+            </div>
+          ))}
         </div>
 
-        {/* Games Grid */}
-        <div className="space-y-6">
-          {filteredGames.map((game, gameIdx) => (
-            <div key={gameIdx} className="space-y-4">
-              {/* Game Header */}
-              <div className="bg-slate-800/30 border border-slate-700/50 rounded-lg p-4 backdrop-blur">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                    {/* Away Team */}
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-12 h-12 rounded-lg bg-slate-700/50 flex items-center justify-center text-2xl border border-slate-600/50"
-                        style={{ borderColor: getTeamColor(game.awayTeam) + '50' }}
-                      >
-                        {getTeamLogo(game.awayTeam)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-300">
-                          {MLBTeams[game.awayTeam]?.name || 'Team'}
-                        </p>
-                        <p className="text-xs text-slate-500">{game.awayTeam}</p>
-                      </div>
-                    </div>
+        {/* Main Game */}
+        <div style={{ background: 'rgba(51, 65, 85, 0.3)', border: '1px solid rgba(100, 116, 139, 0.5)', borderRadius: '12px', padding: '2rem', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', margin: '0 0 2rem 0' }}>Today's Featured Matchup</h2>
 
-                    {/* VS */}
-                    <div className="text-slate-500 font-semibold">@</div>
-
-                    {/* Home Team */}
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-12 h-12 rounded-lg bg-slate-700/50 flex items-center justify-center text-2xl border border-slate-600/50"
-                        style={{ borderColor: getTeamColor(game.homeTeam) + '50' }}
-                      >
-                        {getTeamLogo(game.homeTeam)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-300">
-                          {MLBTeams[game.homeTeam]?.name || 'Team'}
-                        </p>
-                        <p className="text-xs text-slate-500">{game.homeTeam}</p>
-                      </div>
-                    </div>
+          {games.map(game => (
+            <div key={game.id}>
+              {/* Game Header with Logos */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', gap: '2rem' }}>
+                {/* Away Team */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                  <TeamLogo teamCode={game.away} />
+                  <div style={{ textAlign: 'center' }}>
+                    <p style={{ fontSize: '14px', fontWeight: 'bold', color: 'white', margin: 0 }}>{teams[game.away].name}</p>
+                    <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0 0' }}>{teams[game.away].code}</p>
+                    <p style={{ fontSize: '11px', color: '#64748b', margin: '4px 0 0 0' }}>{teams[game.away].ballpark}</p>
                   </div>
+                </div>
 
-                  {/* Game Time */}
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-slate-300">7:05 PM ET</p>
-                    <p className="text-xs text-slate-500">Today</p>
+                {/* VS */}
+                <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#64748b', marginTop: '2rem' }}>VS</div>
+
+                {/* Home Team */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                  <TeamLogo teamCode={game.home} />
+                  <div style={{ textAlign: 'center' }}>
+                    <p style={{ fontSize: '14px', fontWeight: 'bold', color: 'white', margin: 0 }}>{teams[game.home].name}</p>
+                    <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0 0' }}>{teams[game.home].code}</p>
+                    <p style={{ fontSize: '11px', color: '#64748b', margin: '4px 0 0 0' }}>{teams[game.home].ballpark}</p>
                   </div>
+                </div>
+
+                {/* Game Info */}
+                <div style={{ textAlign: 'right', marginTop: '1rem' }}>
+                  <p style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', margin: 0 }}>{game.time}</p>
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0 0' }}>{game.date}</p>
                 </div>
               </div>
 
-              {/* Opportunities Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {game.opportunities.map((opp, oppIdx) => (
-                  <div
-                    key={oppIdx}
-                    className={`rounded-lg p-4 backdrop-blur transition border ${getConfidenceBg(
-                      opp.confidence
-                    )}`}
-                  >
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        {opp.market === 'ML' && <Icons.Moneyline className="w-5 h-5 text-slate-400" />}
-                        {opp.market === 'SPREAD' && <Icons.Spread className="w-5 h-5 text-slate-400" />}
-                        {opp.market === 'OVER_UNDER' && <Icons.Total className="w-5 h-5 text-slate-400" />}
-                        <span className="text-xs font-semibold text-slate-300">{opp.market}</span>
+              {/* Markets */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+                {game.markets.map((m, i) => (
+                  <div key={i} style={{ background: m.confidence >= 80 ? 'rgba(16, 185, 129, 0.1)' : m.confidence >= 70 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(217, 119, 6, 0.1)', border: m.confidence >= 80 ? '1px solid rgba(16, 185, 129, 0.3)' : m.confidence >= 70 ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid rgba(217, 119, 6, 0.3)', borderRadius: '8px', padding: '1.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                      <div>
+                        <p style={{ fontSize: '12px', fontWeight: '600', color: '#cbd5e1', margin: 0, textTransform: 'uppercase' }}>{m.type}</p>
+                        <p style={{ fontSize: '28px', fontWeight: 'bold', color: 'white', margin: '0.5rem 0 0 0' }}>{m.confidence}%</p>
                       </div>
-                      <div className={`text-xs font-bold px-2 py-1 rounded ${getConfidenceColor(opp.confidence)}`}>
-                        {opp.confidence}
+                      <div style={{ background: m.confidence >= 80 ? 'rgba(16, 185, 129, 0.2)' : m.confidence >= 70 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(217, 119, 6, 0.2)', color: m.confidence >= 80 ? '#6ee7b7' : m.confidence >= 70 ? '#93c5fd' : '#fcd34d', padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
+                        {m.rating}
                       </div>
                     </div>
 
-                    {/* Recommendation */}
-                    <div className="mb-4">
-                      <p className="text-2xl font-bold text-white mb-1">
-                        {opp.recommendation === 'BET_AWAY' ? '↑ ' : opp.recommendation === 'OVER' ? '⬆ ' : '⬇ '}
-                        {opp.recommendation.replace('BET_', '')}
-                      </p>
-                      <p className="text-xs text-slate-400">{opp.rating}</p>
-                    </div>
-
-                    {/* Stats Grid */}
-                    <div className="space-y-2 mb-4 pb-4 border-b border-slate-700/50">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400">Edge</span>
-                        <span className="text-sm font-bold text-emerald-400">{opp.edge}</span>
+                    <div style={{ borderBottom: '1px solid rgba(100, 116, 139, 0.5)', paddingBottom: '1rem', marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>Pick</span>
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#10b981' }}>{m.pick}</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400">Best Odds</span>
-                        <span className="text-sm font-bold text-white">{opp.bestOdds}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>Expected Value</span>
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#10b981' }}>{m.edge}</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400">Book</span>
-                        <span className="text-xs font-semibold text-slate-300">{opp.bestBook}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>Best Odds</span>
+                        <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'white' }}>{m.odds}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>Book</span>
+                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#cbd5e1' }}>{m.book}</span>
                       </div>
                     </div>
 
-                    {/* Bet Size */}
-                    {profile !== 'RESEARCH' && (
-                      <div className="mb-4">
-                        <p className="text-xs text-slate-400 mb-1">Suggested Bet Size</p>
-                        <p className="text-lg font-bold text-white">${opp.betSize}</p>
-                      </div>
-                    )}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 0.25rem 0' }}>Kelly Sizing</p>
+                      <p style={{ fontSize: '18px', fontWeight: 'bold', color: 'white', margin: 0 }}>{m.size}</p>
+                    </div>
 
-                    {/* Action Button */}
-                    <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold py-2 rounded-lg transition flex items-center justify-center gap-2">
-                      <Icons.Zap className="w-4 h-4" />
-                      {profile === 'RESEARCH' ? 'View Details' : 'Place Bet'}
+                    <button style={{ width: '100%', background: 'linear-gradient(135deg, #10b981, #3b82f6)', color: 'white', border: 'none', borderRadius: '8px', padding: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px' }}>
+                      ⚡ Place Bet
                     </button>
                   </div>
                 ))}
@@ -284,41 +222,56 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Empty State */}
-        {filteredGames.length === 0 && (
-          <div className="text-center py-12">
-            <Icons.Target className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <p className="text-slate-400">No opportunities matching your profile</p>
+        {/* Other Games */}
+        <div>
+          <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'white', margin: '0 0 1.5rem 0' }}>Other Games Today</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+            {otherGames.map((game, i) => (
+              <div key={i} style={{ background: 'rgba(51, 65, 85, 0.3)', border: '1px solid rgba(100, 116, 139, 0.5)', borderRadius: '8px', padding: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: 1 }}>
+                    <TeamLogo teamCode={game.away} />
+                    <div>
+                      <p style={{ fontWeight: 'bold', color: 'white', margin: 0, fontSize: '14px' }}>{teams[game.away].name}</p>
+                      <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>{teams[game.away].code}</p>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8' }}>{game.time}</div>
+                </div>
+                <div style={{ borderTop: '1px solid rgba(100, 116, 139, 0.5)', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: 1 }}>
+                    <TeamLogo teamCode={game.home} />
+                    <div>
+                      <p style={{ fontWeight: 'bold', color: 'white', margin: 0, fontSize: '14px' }}>{teams[game.home].name}</p>
+                      <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>{teams[game.home].code}</p>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#10b981' }}>{game.opps}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700/50 bg-slate-900/50 backdrop-blur mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-3 gap-8 mb-8">
-            <div>
-              <h4 className="font-semibold text-white mb-3">About</h4>
-              <p className="text-xs text-slate-400">
-                M9 Terminal provides sports market intelligence for serious bettors. Data-driven analysis, no picks.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-3">Disclaimer</h4>
-              <p className="text-xs text-slate-400">
-                Past performance ≠ future results. Gambling involves risk. Gamble responsibly. 21+ only.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-3">Data Sources</h4>
-              <p className="text-xs text-slate-400">
-                Odds via the-odds-api.com • Game data via SportsData.io • Real-time verified data
-              </p>
-            </div>
+      <footer style={{ borderTop: '1px solid rgba(100, 116, 139, 0.5)', background: 'rgba(15, 23, 42, 0.5)', marginTop: '3rem' }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginBottom: '2rem' }}>
+          <div>
+            <h4 style={{ fontWeight: 'bold', color: 'white', margin: '0 0 0.5rem 0' }}>About M9 Terminal</h4>
+            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: '1.5' }}>Professional sports market intelligence for serious bettors. Data-driven analysis, no picks. Process over emotion.</p>
           </div>
-          <div className="border-t border-slate-700/50 pt-6 text-center text-xs text-slate-500">
-            <p>© 2026 M9 Terminal by Oddsify Labs. All rights reserved.</p>
+          <div>
+            <h4 style={{ fontWeight: 'bold', color: 'white', margin: '0 0 0.5rem 0' }}>Legal Notice</h4>
+            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: '1.5' }}>Past performance ≠ future results. Gambling involves risk. Must be 21+. Gamble responsibly.</p>
           </div>
+          <div>
+            <h4 style={{ fontWeight: 'bold', color: 'white', margin: '0 0 0.5rem 0' }}>Data Sources</h4>
+            <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, lineHeight: '1.5' }}>Real-time odds via the-odds-api.com • Game data via SportsData.io</p>
+          </div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(100, 116, 139, 0.5)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '12px', color: '#64748b' }}>
+          © 2026 M9 Terminal by Oddsify Labs. All rights reserved.
         </div>
       </footer>
     </div>
