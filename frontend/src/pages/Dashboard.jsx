@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 /**
- * M9 Terminal Dashboard — Modern Monochrome Theme with Footer Menu
- * Clean, professional black/white/gray design with bottom navigation
+ * M9 Terminal Dashboard — Modern Monochrome Theme with Integrated Bottom Navigation
+ * Sleek, contemporary design with sticky header and combined footer/menu bar
  */
 
 const Dashboard = () => {
@@ -41,7 +41,7 @@ const Dashboard = () => {
     { away: 'LAD', home: 'ARI', time: '4:10 PM', opps: '+1' }
   ];
 
-  // Menu items for footer
+  // Menu items for bottom navigation
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'bet-log', label: 'Bet Log' },
@@ -267,7 +267,7 @@ const Dashboard = () => {
             </div>
 
             {/* Other Games */}
-            <div>
+            <div style={{ marginBottom: '6rem' }}>
               <h2 style={{ fontSize: '14px', fontWeight: '400', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Other Games Today</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
                 {otherGames.map((game, i) => (
@@ -366,71 +366,62 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Main Content - Flex to push footer down */}
+      {/* Main Content - Flex to push bottom nav down */}
       <main style={{ flex: 1, maxWidth: '100%', margin: '0 auto', padding: '2rem 1rem', overflowY: 'auto', width: '100%' }}>
         {renderContent()}
       </main>
 
-      {/* Footer with Navigation Menu */}
-      <footer style={{ borderTop: '1px solid #1a1a1a', background: '#0a0a0a', marginTop: 'auto' }}>
-        {/* Navigation Menu */}
-        <div style={{ borderBottom: '1px solid #1a1a1a', padding: '0 1rem' }}>
-          <div style={{ maxWidth: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '2rem', overflowX: 'auto' }}>
-            {menuItems.map(item => (
-              <button
-                key={item.id}
-                onClick={() => setActiveMenu(item.id)}
-                style={{
-                  padding: '1rem 0',
-                  border: 'none',
-                  background: 'transparent',
-                  color: activeMenu === item.id ? '#8FDC23' : '#606060',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                  fontWeight: '400',
-                  borderBottom: activeMenu === item.id ? '2px solid #8FDC23' : '2px solid transparent',
-                  transition: 'all 0.2s ease',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-                  whiteSpace: 'nowrap'
-                }}
-                onMouseEnter={(e) => {
-                  if (activeMenu !== item.id) {
-                    e.target.style.color = '#ffffff';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeMenu !== item.id) {
-                    e.target.style.color = '#606060';
-                  }
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+      {/* Combined Footer Navigation Bar */}
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#0a0a0a', borderTop: '1px solid #1a1a1a', zIndex: 100, backdropFilter: 'blur(8px)', backgroundColor: 'rgba(10, 10, 10, 0.95)' }}>
+        <div style={{ maxWidth: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1rem', overflowX: 'auto' }}>
+          {menuItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => setActiveMenu(item.id)}
+              style={{
+                padding: '0.75rem 1rem',
+                border: 'none',
+                background: 'transparent',
+                color: activeMenu === item.id ? '#8FDC23' : '#606060',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '400',
+                transition: 'all 0.2s ease',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+                paddingBottom: '0.5rem'
+              }}
+              onMouseEnter={(e) => {
+                if (activeMenu !== item.id) {
+                  e.target.style.color = '#ffffff';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeMenu !== item.id) {
+                  e.target.style.color = '#606060';
+                }
+              }}
+            >
+              {item.label}
+              {activeMenu === item.id && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  background: '#8FDC23',
+                  borderRadius: '1px'
+                }} />
+              )}
+            </button>
+          ))}
         </div>
+      </nav>
 
-        {/* Footer Content */}
-        <div style={{ padding: '2rem 1rem' }}>
-          <div style={{ maxWidth: '100%', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', marginBottom: '2rem' }}>
-            <div>
-              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>About</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Professional sports market intelligence. Data-driven analysis. No picks. Process over emotion.</p>
-            </div>
-            <div>
-              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Legal</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Past performance ≠ future results. Gambling involves risk. Must be 21+. Gamble responsibly.</p>
-            </div>
-            <div>
-              <h4 style={{ fontWeight: '500', color: '#ffffff', margin: '0 0 0.75rem 0', fontSize: '12px', letterSpacing: '0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Data</h4>
-              <p style={{ fontSize: '11px', color: '#808080', margin: 0, lineHeight: '1.6', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Real-time odds via the-odds-api.com • Game data via SportsData.io</p>
-            </div>
-          </div>
-          <div style={{ borderTop: '1px solid #1a1a1a', paddingTop: '1.5rem', textAlign: 'center', fontSize: '11px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-            © 2026 M9 Terminal by Oddsify Labs. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      {/* Spacer for fixed bottom nav */}
+      <div style={{ height: '70px' }} />
 
       {/* Scroll to Top Button */}
       {showScrollTop && (
@@ -438,7 +429,7 @@ const Dashboard = () => {
           onClick={scrollToTop}
           style={{
             position: 'fixed',
-            bottom: '2rem',
+            bottom: '90px',
             right: '2rem',
             width: '50px',
             height: '50px',
