@@ -474,88 +474,32 @@ const Dashboard = () => {
                 </div>
               </Card>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
-              {/* LEFT COLUMN: Current Bets */}
-              <div>
-                <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Current Bets</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-                  {currentBets.map((bet) => (
-                    <Card key={bet.id}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                        <div>
-                          <p style={{ fontSize: '11px', color: '#8FDC23', margin: '0 0 0.5rem 0', fontWeight: '700', letterSpacing: '1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', textTransform: 'uppercase' }}>{bet.sport}</p>
-                          <p style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.game}</p>
-                          <p style={{ fontSize: '12px', color: '#808080', margin: '0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.market}</p>
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.time}</div>
-                      </div>
-                      <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: '1rem' }}>
-                        <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Pick: <span style={{ color: '#8FDC23', fontWeight: '700' }}>{bet.pick}</span></p>
-                        <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Amount: <span style={{ color: '#8FDC23', fontWeight: '700', fontSize: '14px' }}>{bet.amount}</span></p>
-                        <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Odds: <span style={{ color: '#ffffff', fontWeight: '700' }}>{bet.odds}</span></p>
-                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                          <span style={{ fontSize: '10px', color: '#8FDC23', fontWeight: '700' }}>●</span>
-                          <span style={{ fontSize: '12px', color: '#8FDC23', fontWeight: '700', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.status}</span>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}</div>
-              </div>
 
-              {/* RIGHT COLUMN: Activity Log & API Status */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-                {/* Activity Log */}
-                <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Activity Log</h2>
-                  <Card>
-                    <div style={{ display: 'grid', gap: '1.5rem' }}>
-                      {activityLog.map((log, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '1rem', paddingBottom: '1.5rem', borderBottom: i < activityLog.length - 1 ? '1px solid #2a2a2a' : 'none' }}>
-                          <div style={{ fontSize: '24px', minWidth: '28px', textAlign: 'center' }}>
-                            {log.type === 'bet' && '◆'}
-                            {log.type === 'signal' && '✦'}
-                            {log.type === 'api' && '⊕'}
-                            {log.type === 'data' && '⟳'}
-                            {log.type === 'profile' && '⬚'}
-                          </div>
-                          <div style={{ flex: 1 }}>
-                            <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{log.action}</p>
-                            <p style={{ fontSize: '11px', color: '#808080', margin: '0 0 0.75rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{log.details}</p>
-                            <p style={{ fontSize: '10px', color: '#606060', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{log.timestamp}</p>
-                          </div>
-                        </div>
-                      ))}</div>
+            {/* Middle Row: Current Bets (Full Width) */}
+            <div style={{ marginBottom: '4rem' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Current Bets</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                {currentBets.map((bet) => (
+                  <Card key={bet.id}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                      <div>
+                        <p style={{ fontSize: '11px', color: '#8FDC23', margin: '0 0 0.5rem 0', fontWeight: '700', letterSpacing: '1px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', textTransform: 'uppercase' }}>{bet.sport}</p>
+                        <p style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', margin: '0 0 0.5rem 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.game}</p>
+                        <p style={{ fontSize: '12px', color: '#808080', margin: '0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.market}</p>
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.time}</div>
+                    </div>
+                    <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: '1rem' }}>
+                      <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Pick: <span style={{ color: '#8FDC23', fontWeight: '700' }}>{bet.pick}</span></p>
+                      <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Amount: <span style={{ color: '#8FDC23', fontWeight: '700', fontSize: '14px' }}>{bet.amount}</span></p>
+                      <p style={{ fontSize: '12px', color: '#808080', margin: '0 0 0.75rem 0', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Odds: <span style={{ color: '#ffffff', fontWeight: '700' }}>{bet.odds}</span></p>
+                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <span style={{ fontSize: '10px', color: '#8FDC23', fontWeight: '700' }}>●</span>
+                        <span style={{ fontSize: '12px', color: '#8FDC23', fontWeight: '700', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{bet.status}</span>
+                      </div>
+                    </div>
                   </Card>
-                </div>
-
-                {/* API Status */}
-                <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#ffffff', margin: '0 0 1.5rem 0', letterSpacing: '-0.5px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>API Status</h2>
-                  <Card>
-                    <div style={{ display: 'grid', gap: '1.5rem' }}>
-                      {apiStatus.map((api, i) => (
-                        <div key={i} style={{ paddingBottom: '1.5rem', borderBottom: i < apiStatus.length - 1 ? '1px solid #2a2a2a' : 'none' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                            <div>
-                              <p style={{ fontSize: '12px', fontWeight: '700', color: '#ffffff', margin: '0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{api.name}</p>
-                            </div>
-                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                              <span style={{ fontSize: '10px', color: '#8FDC23', fontWeight: '700' }}>●</span>
-                              <span style={{ fontSize: '11px', color: '#8FDC23', fontWeight: '700', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{api.status}</span>
-                            </div>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Ping</span>
-                            <span style={{ fontSize: '11px', color: '#ffffff', fontWeight: '600', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{api.ping}</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ fontSize: '11px', color: '#808080', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>Last sync</span>
-                            <span style={{ fontSize: '11px', color: '#606060', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>{api.lastSync}</span>
-                          </div>
-                        </div>
-                      ))}</div>
-                  </Card>
-                </div>
+                ))}
               </div>
             </div>
           </>
