@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Header from '../components/Header';
 
 const Tracker = ({ setActiveMenu }) => {
   const [activeTab, setActiveTab] = useState('betlog');
@@ -438,11 +437,15 @@ const Tracker = ({ setActiveMenu }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 pb-20">
-      <Header setAppMenu={setActiveMenu} title="Tracker" icon="📈" />
+    <div className="flex flex-col h-full bg-white overflow-hidden">
+      {/* Page Title */}
+      <div className="px-4 py-4 border-b border-gray-200">
+        <h2 className="text-lg font-bold text-gray-900">📈 Tracker</h2>
+        <p className="text-xs text-gray-600 mt-1">Bet Log, CLV & Bankroll</p>
+      </div>
 
       {/* Tab Navigation */}
-      <div className="sticky top-16 z-40 bg-gray-50 border-b border-gray-200">
+      <div className="sticky top-0 z-40 bg-gray-50 border-b border-gray-200">
         <div className="flex overflow-x-auto">
           {['betlog', 'clv', 'bankroll', 'credits'].map((tab) => (
             <button
@@ -468,11 +471,11 @@ const Tracker = ({ setActiveMenu }) => {
       </div>
 
       {/* Content */}
-      <div className="px-4 py-6 max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto pb-20">
+        <div className="px-4 py-6 max-w-4xl mx-auto">
 
-        {/* BET LOG TAB */}
-        {activeTab === 'betlog' && (
-          <div className="space-y-4">
+          {/* BET LOG TAB */}
+          {activeTab === 'betlog' && (
             <div className="mb-6">
               <h2 className="text-lg font-bold text-gray-900">Bet Log</h2>
               <p className="text-sm text-gray-600 mt-1">Complete MLB bet history</p>
@@ -833,6 +836,7 @@ const Tracker = ({ setActiveMenu }) => {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

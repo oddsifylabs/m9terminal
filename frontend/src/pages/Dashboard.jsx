@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Header from '../components/Header';
 
 const Dashboard = ({ setAppMenu }) => {
-  const [activeMenu, setActiveMenu] = useState('dashboard');
   const [chatMessages, setChatMessages] = useState([
     { role: 'assistant', text: 'Hi! I\'m Claude. Ask me anything about today\'s games, signals, or betting strategy.' }
   ]);
@@ -10,29 +8,15 @@ const Dashboard = ({ setAppMenu }) => {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Auto-scroll to latest message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  // Sport logos (emoji for now, can be replaced with actual images)
-  const sportLogos = {
-    MLB: '⚾',
-    NBA: '🏀',
-    NFL: '🏈',
-    NHL: '🏒',
-    SOCCER: '⚽',
-    COLLEGE_FB: '🏈',
-    COLLEGE_BB: '🏀',
-    TENNIS: '🎾'
-  };
-
-  // Summary stats with logos
   const summaryStats = [
-    { label: 'Total Games', value: '24', color: '#4A90E2' },
-    { label: 'Sharp Signals', value: '7', color: '#7ED321' },
-    { label: 'Avg Confidence', value: '82%', color: '#F5A623' },
-    { label: 'ROI Today', value: '+2.3%', color: '#50E3C2' }
+    { label: 'Total Games', value: '24', color: 'blue' },
+    { label: 'Sharp Signals', value: '7', color: 'green' },
+    { label: 'Avg Confidence', value: '82%', color: 'amber' },
+    { label: 'ROI Today', value: '+2.3%', color: 'emerald' }
   ];
 
   const currentBets = [
@@ -47,317 +31,154 @@ const Dashboard = ({ setAppMenu }) => {
     },
     {
       id: 2,
-      sport: 'NFL',
-      matchup: 'KC vs LAC',
-      bet: 'KC -3',
+      sport: 'MLB',
+      matchup: 'LAD vs SF',
+      bet: 'Over 8.5',
       confidence: 78,
       status: 'pending',
       signal: 'STEAM'
     },
-    {
-      id: 3,
-      sport: 'NBA',
-      matchup: 'LAL vs GSW',
-      bet: 'LAL +5.5',
-      confidence: 72,
-      status: 'pending',
-      signal: 'LINE_VALUE'
-    }
   ];
 
-  const oddsMovement = [
-    { sport: 'MLB', game: 'HOU vs SEA', line: 'HOU -2.5', movement: '+0.5', direction: '↑', books: '8/10' },
-    { sport: 'NBA', game: 'MIA vs BOS', line: 'MIA +3', movement: '+1.0', direction: '↑', books: '9/10' },
-    { sport: 'NFL', game: 'DAL vs PHI', line: 'DAL -2', movement: '-0.5', direction: '↓', books: '6/10' }
-  ];
-
-  const topGames = [
-    {
-      id: 1,
-      sport: 'MLB',
-      home: 'New York Yankees',
-      away: 'Boston Red Sox',
-      time: '7:05 PM ET',
-      homeOdds: -110,
-      awayOdds: -110,
-      signals: 2,
-      confidence: 86
-    },
-    {
-      id: 2,
-      sport: 'NBA',
-      home: 'Lakers',
-      away: 'Warriors',
-      time: '10:00 PM ET',
-      homeOdds: -105,
-      awayOdds: -115,
-      signals: 3,
-      confidence: 79
-    },
-    {
-      id: 3,
-      sport: 'NFL',
-      home: 'Kansas City Chiefs',
-      away: 'Los Angeles Chargers',
-      time: '1:00 PM ET',
-      homeOdds: -160,
-      awayOdds: +140,
-      signals: 2,
-      confidence: 73
-    }
-  ];
-
-  // Send message to Claude API via backend proxy
   const handleSendMessage = async () => {
     if (!chatInput.trim()) return;
 
-    // Add user message to chat
     const userMessage = { role: 'user', text: chatInput };
     setChatMessages([...chatMessages, userMessage]);
     setChatInput('');
     setLoading(true);
 
-    try {
-      const response = await fetch('/api/claude-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: chatInput,
-          context: {
-            currentBets,
-            games: topGames,
-            stats: summaryStats
-          }
-        })
-      });
-
-      const data = await response.json();
-      
-      if (data.error) {
-        setChatMessages(prev => [...prev, {
-          role: 'assistant',
-          text: `Sorry, I couldn't analyze that: ${data.error}. Try asking about specific games or signals.`
-        }]);
-      } else {
-        setChatMessages(prev => [...prev, {
-          role: 'assistant',
-          text: data.response || 'I understood your question but couldn\'t generate a response.'
-        }]);
-      }
-    } catch (error) {
-      setChatMessages(prev => [...prev, {
+    // Simulate API response
+    setTimeout(() => {
+      const assistantMessage = {
         role: 'assistant',
-        text: 'Connection error. Please try again.'
-      }]);
-    } finally {
+        text: 'That\'s a great question! Based on today\'s signals and market movement, I\'d recommend focusing on the sharp money detections in the Markets tab.'
+      };
+      setChatMessages(prev => [...prev, assistantMessage]);
       setLoading(false);
-    }
+    }, 1000);
   };
 
-  const renderContent = () => {
-    switch(activeMenu) {
-      case 'dashboard':
-        return (
-          <>
-            {/* Summary Stats */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-              gap: '1rem',
-              marginBottom: '2rem'
-            }}>
-              {summaryStats.map((stat, idx) => (
-                <div key={idx} style={{
-                  background: '#1a1a1a',
-                  border: `2px solid ${stat.color}`,
-                  borderRadius: '8px',
-                  padding: '1.5rem 1rem',
-                  textAlign: 'center'
-                }}>
-                  <p style={{ margin: '0 0 0.5rem 0', fontSize: '12px', color: '#888', textTransform: 'uppercase' }}>
-                    {stat.label}
-                  </p>
-                  <p style={{ margin: 0, fontSize: '28px', fontWeight: 'bold', color: stat.color }}>
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
+  const getColorClass = (color) => {
+    const colors = {
+      blue: 'from-blue-50 border-blue-200',
+      green: 'from-green-50 border-green-200',
+      amber: 'from-amber-50 border-amber-200',
+      emerald: 'from-emerald-50 border-emerald-200'
+    };
+    return colors[color] || colors.blue;
+  };
 
-            {/* Current Bets Section */}
-            <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ margin: '0 0 1rem 0', color: '#fff', fontSize: '16px', fontWeight: '600' }}>
-                📍 Current Bets
-              </h3>
-              <div style={{ display: 'grid', gap: '0.75rem' }}>
-                {currentBets.map(bet => (
-                  <div key={bet.id} style={{
-                    background: '#1a1a1a',
-                    border: '1px solid #333',
-                    borderRadius: '6px',
-                    padding: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <span style={{ fontSize: '24px' }}>{sportLogos[bet.sport] || '🎯'}</span>
-                      <div>
-                        <p style={{ margin: 0, fontWeight: '600', color: '#fff' }}>
-                          {bet.matchup}
-                        </p>
-                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '12px', color: '#999' }}>
-                          {bet.bet} • {bet.signal}
-                        </p>
-                      </div>
-                    </div>
-                    <div style={{
-                      background: `${bet.confidence > 80 ? '#7ED321' : bet.confidence > 70 ? '#F5A623' : '#E74C3C'}80`,
-                      color: '#fff',
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: 'bold'
-                    }}>
-                      {bet.confidence}%
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Odds Movement Section */}
-            <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ margin: '0 0 1rem 0', color: '#fff', fontSize: '16px', fontWeight: '600' }}>
-                📊 Odds Movement
-              </h3>
-              <div style={{
-                overflowX: 'auto',
-                background: '#1a1a1a',
-                borderRadius: '6px',
-                padding: '1rem'
-              }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr>
-                      <th style={{ textAlign: 'left', padding: '0.5rem', color: '#999', fontSize: '12px', fontWeight: '600' }}>Sport</th>
-                      <th style={{ textAlign: 'left', padding: '0.5rem', color: '#999', fontSize: '12px', fontWeight: '600' }}>Game</th>
-                      <th style={{ textAlign: 'left', padding: '0.5rem', color: '#999', fontSize: '12px', fontWeight: '600' }}>Line</th>
-                      <th style={{ textAlign: 'right', padding: '0.5rem', color: '#999', fontSize: '12px', fontWeight: '600' }}>Movement</th>
-                      <th style={{ textAlign: 'right', padding: '0.5rem', color: '#999', fontSize: '12px', fontWeight: '600' }}>Books</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {oddsMovement.map((row, idx) => (
-                      <tr key={idx} style={{ borderTop: '1px solid #333' }}>
-                        <td style={{ padding: '0.75rem 0.5rem', fontSize: '14px' }}>
-                          <span style={{ marginRight: '0.5rem' }}>{sportLogos[row.sport]}</span>
-                          {row.sport}
-                        </td>
-                        <td style={{ padding: '0.75rem 0.5rem', fontSize: '14px', color: '#ddd' }}>{row.game}</td>
-                        <td style={{ padding: '0.75rem 0.5rem', fontSize: '14px', color: '#ddd' }}>{row.line}</td>
-                        <td style={{
-                          padding: '0.75rem 0.5rem',
-                          fontSize: '14px',
-                          fontWeight: 'bold',
-                          color: row.movement.includes('+') ? '#7ED321' : '#E74C3C',
-                          textAlign: 'right'
-                        }}>
-                          {row.direction} {row.movement}
-                        </td>
-                        <td style={{ padding: '0.75rem 0.5rem', fontSize: '14px', textAlign: 'right', color: '#999' }}>
-                          {row.books}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Top Games by Confidence */}
-            <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ margin: '0 0 1rem 0', color: '#fff', fontSize: '16px', fontWeight: '600' }}>
-                🎯 Top Games by Confidence
-              </h3>
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                {topGames.map(game => (
-                  <div key={game.id} style={{
-                    background: '#1a1a1a',
-                    border: '1px solid #333',
-                    borderRadius: '6px',
-                    padding: '1.25rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.75rem'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <span style={{ fontSize: '24px' }}>{sportLogos[game.sport]}</span>
-                        <div>
-                          <p style={{ margin: 0, fontWeight: '600', color: '#fff' }}>
-                            {game.away} @ {game.home}
-                          </p>
-                          <p style={{ margin: '0.25rem 0 0 0', fontSize: '12px', color: '#999' }}>
-                            {game.time}
-                          </p>
-                        </div>
-                      </div>
-                      <div style={{
-                        background: '#7ED321',
-                        color: '#000',
-                        padding: '0.5rem 0.75rem',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        fontSize: '12px'
-                      }}>
-                        {game.confidence}% ({game.signals} signals)
-                      </div>
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      fontSize: '13px',
-                      color: '#ddd',
-                      paddingTop: '0.5rem',
-                      borderTop: '1px solid #333'
-                    }}>
-                      <span>Home: {game.homeOdds > 0 ? '+' : ''}{game.homeOdds}</span>
-                      <span>Away: {game.awayOdds > 0 ? '+' : ''}{game.awayOdds}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        );
-      default:
-        return null;
-    }
+  const getTextColor = (color) => {
+    const colors = {
+      blue: 'text-blue-700',
+      green: 'text-green-700',
+      amber: 'text-amber-700',
+      emerald: 'text-emerald-700'
+    };
+    return colors[color] || colors.blue;
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      background: '#0a0a0a',
-      color: '#fff'
-    }}>
-      <Header setAppMenu={setAppMenu} />
+    <div className="flex flex-col h-full bg-white overflow-hidden">
+      {/* Page Title */}
+      <div className="px-4 py-4 border-b border-gray-200">
+        <h2 className="text-lg font-bold text-gray-900">📊 Dashboard</h2>
+        <p className="text-xs text-gray-600 mt-1">MLB Model Overview</p>
+      </div>
 
-      {/* Main content area */}
-      <main style={{
-        flex: 1,
-        minHeight: 0,
-        padding: '2.5rem 1.5rem',
-        overflowY: 'auto',
-        width: '100%',
-        maxWidth: '100%'
-      }}>
-        {renderContent()}
-      </main>
+      {/* Main Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto pb-20">
+        <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
 
+          {/* Summary Stats */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-3">Today's Summary</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {summaryStats.map((stat, idx) => (
+                <div key={idx} className={`bg-gradient-to-br ${getColorClass(stat.color)} to-white border rounded-lg p-4`}>
+                  <p className="text-xs text-gray-600 font-medium">{stat.label}</p>
+                  <p className={`text-2xl font-bold ${getTextColor(stat.color)} mt-2`}>{stat.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Active Bets */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-3">Active Bets</h3>
+            <div className="space-y-3">
+              {currentBets.map((bet) => (
+                <div key={bet.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-bold text-gray-900">{bet.matchup}</p>
+                      <p className="text-xs text-gray-600">{bet.bet}</p>
+                    </div>
+                    <span className="text-xs font-bold px-2 py-1 rounded bg-green-100 text-green-700">{bet.signal}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-gray-600">Confidence</span>
+                    <div className="w-24 bg-gray-200 rounded-full h-2">
+                      <div className="bg-green-600 h-2 rounded-full" style={{ width: `${bet.confidence}%` }}></div>
+                    </div>
+                    <span className="font-bold text-gray-900">{bet.confidence}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Claude AI Chat */}
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 mb-3">Ask Claude AI</h3>
+            <div className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col h-64">
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto space-y-3 mb-4">
+                {chatMessages.map((msg, idx) => (
+                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
+                      msg.role === 'user' 
+                        ? 'bg-green-600 text-white' 
+                        : 'bg-gray-100 text-gray-900'
+                    }`}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-sm">
+                      Thinking...
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Input */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ask about games, signals..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-600"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={loading}
+                  className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-all disabled:opacity-50"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 };
