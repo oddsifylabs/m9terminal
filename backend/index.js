@@ -35,7 +35,7 @@ pool.connect((err, client, release) => {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? '*' : 'http://localhost:3000'),
   credentials: true,
 }));
 app.use(express.json());
@@ -51,6 +51,11 @@ app.use('/api/markets', optimizedMarketsRoutes);
 app.use('/api/engine', engineRoutes);
 app.use('/api', claudeRoutes);
 
+// Serve React frontend (static files from build folder)
+const path = require('path');
+const frontendBuildPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendBuildPath));
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
@@ -60,6 +65,15 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Health check
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
+// API health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -94,12 +108,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Not Found',
-    path: req.path,
-    method: req.method,
+// SPA fallback: serve index.html for all unmatched routes
+app.get('*', (req, res) => {
+  const indexPath = path.join(frontendBuildPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).json({
+        error: 'Not Found',
+        path: req.path,
+        method: req.method,
+      });
+    }
   });
 });
 
