@@ -41,15 +41,38 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-const mlbLiveRoutes = require('./routes/mlb-live');
-const optimizedMarketsRoutes = require('./routes/optimized-markets');
-const engineRoutes = require('./routes/engine');
-const claudeRoutes = require('./routes/claude');
-app.use('/api/mlb', mlbLiveRoutes);
-app.use('/api/markets', optimizedMarketsRoutes);
-app.use('/api/engine', engineRoutes);
-app.use('/api', claudeRoutes);
+// Routes - Load with error handling
+try {
+  const mlbLiveRoutes = require('./routes/mlb-live');
+  app.use('/api/mlb', mlbLiveRoutes);
+  console.log('✓ MLB routes loaded');
+} catch (err) {
+  console.warn('⚠️ MLB routes failed:', err.message);
+}
+
+try {
+  const optimizedMarketsRoutes = require('./routes/optimized-markets');
+  app.use('/api/markets', optimizedMarketsRoutes);
+  console.log('✓ Markets routes loaded');
+} catch (err) {
+  console.warn('⚠️ Markets routes failed:', err.message);
+}
+
+try {
+  const engineRoutes = require('./routes/engine');
+  app.use('/api/engine', engineRoutes);
+  console.log('✓ Engine routes loaded');
+} catch (err) {
+  console.warn('⚠️ Engine routes failed:', err.message);
+}
+
+try {
+  const claudeRoutes = require('./routes/claude');
+  app.use('/api', claudeRoutes);
+  console.log('✓ Claude routes loaded');
+} catch (err) {
+  console.warn('⚠️ Claude routes failed:', err.message);
+}
 
 // Serve React frontend (static files from build folder)
 const path = require('path');
@@ -152,7 +175,7 @@ app.get('*', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`\n╔════════════════════════════════════════════════════════════╗`);
   console.log(`║                                                            ║`);
   console.log(`║           🎯 M9 TERMINAL — BACKEND SERVER                 ║`);
@@ -165,6 +188,15 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}\n`);
   console.log(`✓ Health check: GET http://localhost:${PORT}/api/health`);
   console.log(`✓ API root: GET http://localhost:${PORT}/api\n`);
+});
+
+// Handle server errors
+server.on('error', (err) => {
+  console.error('Server error:', err.message);
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use`);
+  }
+  process.exit(1);
 });
 
 // Graceful shutdown
