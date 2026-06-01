@@ -82,21 +82,50 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    name: 'M9 Terminal',
-    version: '1.0.0',
-    description: 'Sports Market Intelligence Platform',
-    endpoints: {
-      health: '/api/health',
-      auth: '/api/auth',
-      signals: '/api/signals',
-      tracker: '/api/tracker',
-      markets: '/api/markets',
-      ai: '/api/ai',
-    },
+// Landing page routes
+app.get('/landing', (req, res) => {
+  const landingPath = path.join(__dirname, '../frontend/public/landing.html');
+  res.sendFile(landingPath, (err) => {
+    if (err) {
+      res.status(404).json({ error: 'Landing page not found' });
+    }
   });
+});
+
+// Serve landing page as root on production
+app.get('/', (req, res) => {
+  // On production (Railway), serve landing page
+  if (process.env.NODE_ENV === 'production') {
+    const landingPath = path.join(__dirname, '../frontend/public/landing.html');
+    res.sendFile(landingPath, (err) => {
+      if (err) {
+        // Fallback to API info if landing page not found
+        res.json({
+          name: 'M9 Terminal',
+          version: '1.0.0',
+          api: '/api',
+          app: '/app',
+        });
+      }
+    });
+  } else {
+    // On development, show API info
+    res.json({
+      name: 'M9 Terminal',
+      version: '1.0.0',
+      description: 'Sports Market Intelligence Platform',
+      endpoints: {
+        landing: '/landing',
+        api: '/api',
+        health: '/api/health',
+        auth: '/api/auth',
+        signals: '/api/signals',
+        tracker: '/api/tracker',
+        markets: '/api/markets',
+        ai: '/api/ai',
+      },
+    });
+  }
 });
 
 // Error handling middleware
