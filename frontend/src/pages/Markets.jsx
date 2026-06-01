@@ -10,14 +10,6 @@ const Markets = ({ setAppMenu }) => {
   const [error, setError] = useState(null);
   const [source, setSource] = useState('loading');
 
-  const sportLogos = {
-    MLB: '⚾',
-    NBA: '🏀',
-    NFL: '🏈',
-    NHL: '🏒',
-    SOCCER: '⚽'
-  };
-
   const sportOptions = [
     { value: 'baseball_mlb', label: 'MLB', logo: '⚾' },
     { value: 'basketball_nba', label: 'NBA', logo: '🏀' },
@@ -49,7 +41,6 @@ const Markets = ({ setAppMenu }) => {
         // Format the data
         let formattedMarkets = [];
         if (selectedSport === 'ALL' && data.results) {
-          // Multi-sport results
           Object.values(data.results).forEach(sportGames => {
             if (Array.isArray(sportGames)) {
               formattedMarkets = [...formattedMarkets, ...sportGames];
@@ -68,7 +59,7 @@ const Markets = ({ setAppMenu }) => {
       } catch (err) {
         console.error('❌ Error fetching markets:', err);
         setError(err.message);
-        setMarkets([]); // Clear any old data
+        setMarkets([]);
         setSource('error');
       } finally {
         setLoading(false);
@@ -90,20 +81,20 @@ const Markets = ({ setAppMenu }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-20">
+    <div className="min-h-screen bg-white text-gray-900 pb-20">
       <Header setAppMenu={setAppMenu} title="Markets" icon="📊" />
 
       {/* Sport Selector */}
-      <div className="sticky top-16 z-40 bg-slate-800/90 backdrop-blur border-b border-slate-700 px-4 py-3">
-        <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="sticky top-16 z-40 bg-gray-50 border-b border-gray-200 px-4 py-4">
+        <div className="flex gap-2 overflow-x-auto pb-3">
           {sportOptions.map(sport => (
             <button
               key={sport.value}
               onClick={() => setSelectedSport(sport.value)}
               className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
                 selectedSport === sport.value
-                  ? 'bg-cyan-500 text-slate-900'
-                  : 'bg-slate-700 hover:bg-slate-600'
+                  ? 'bg-green-600 text-white shadow-md'
+                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-100'
               }`}
             >
               {sport.logo} {sport.label}
@@ -117,47 +108,47 @@ const Markets = ({ setAppMenu }) => {
           placeholder="Search games..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full mt-3 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:border-cyan-500 focus:outline-none"
+          className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-100"
         />
 
         {/* Status */}
-        <div className="text-xs text-slate-400 mt-2">
+        <div className="text-xs text-gray-600 mt-3">
           {loading ? '⏳ Loading...' : `✅ ${filteredMarkets.length} games · Source: ${source}`}
         </div>
       </div>
 
       {/* Content */}
-      <div className="px-4 py-4">
+      <div className="px-4 py-4 max-w-4xl mx-auto">
         {error && (
-          <div className="bg-red-900/30 border border-red-600 rounded-lg p-4 mb-4">
-            <p className="text-red-200">⚠️ Error: {error}</p>
-            <p className="text-sm text-red-300 mt-1">Showing: Demo data (click refresh to retry)</p>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-800 font-medium">⚠️ Error: {error}</p>
+            <p className="text-sm text-red-600 mt-1">Showing: Demo data (click refresh to retry)</p>
           </div>
         )}
 
         {loading && markets.length === 0 ? (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin text-cyan-400 text-3xl">⏳</div>
-            <p className="text-slate-400 mt-3">Loading live markets...</p>
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin text-green-600 text-4xl">⏳</div>
+            <p className="text-gray-600 mt-4">Loading live markets...</p>
           </div>
         ) : filteredMarkets.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-slate-400">No games found</p>
+          <div className="text-center py-12">
+            <p className="text-gray-500">No games found</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {filteredMarkets.map((game) => (
               <div
                 key={game.id}
-                className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 hover:border-cyan-500 transition-all"
+                className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-green-300 transition-all"
               >
                 {/* Matchup Header */}
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="font-bold text-white">
+                    <h3 className="font-bold text-lg text-gray-900">
                       {game.matchup || `${game.away || '?'} vs ${game.home || '?'}`}
                     </h3>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-gray-600">
                       {game.time} {game.stadium && `· ${game.stadium}`}
                     </p>
                   </div>
@@ -165,65 +156,63 @@ const Markets = ({ setAppMenu }) => {
 
                 {/* Odds Section */}
                 {game.odds && (
-                  <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="grid grid-cols-3 gap-3 mb-4">
                     {/* Moneyline */}
-                    <div className="bg-slate-800 rounded p-2">
-                      <p className="text-xs text-slate-400">Moneyline</p>
-                      <p className="text-sm font-bold text-cyan-400">
+                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs text-gray-600 font-medium">MONEYLINE</p>
+                      <p className="text-lg font-bold text-green-600">
                         {game.odds.moneyline?.best || game.odds.moneyline?.away || '-'}
                       </p>
-                      <p className="text-xs text-slate-500">
-                        {game.odds.moneyline?.book || 'Best'}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {game.odds.moneyline?.book || 'Best odds'}
                       </p>
                     </div>
 
                     {/* Spread */}
-                    <div className="bg-slate-800 rounded p-2">
-                      <p className="text-xs text-slate-400">Spread</p>
-                      <p className="text-sm font-bold text-cyan-400">
+                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs text-gray-600 font-medium">SPREAD</p>
+                      <p className="text-lg font-bold text-green-600">
                         {game.odds.spread?.line || game.line || '-'}
                       </p>
-                      <p className="text-xs text-slate-500">
-                        {game.odds.spread?.odds ? `${game.odds.spread.odds}` : ''}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {game.odds.spread?.odds ? `${game.odds.spread.odds}` : 'vs'}
                       </p>
                     </div>
 
                     {/* Total */}
-                    <div className="bg-slate-800 rounded p-2">
-                      <p className="text-xs text-slate-400">Total</p>
-                      <p className="text-sm font-bold text-cyan-400">
+                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs text-gray-600 font-medium">TOTAL</p>
+                      <p className="text-lg font-bold text-green-600">
                         {game.odds.total?.line || '-'}
                       </p>
-                      <p className="text-xs text-slate-500">
-                        O/U
-                      </p>
+                      <p className="text-xs text-gray-500 mt-1">O/U</p>
                     </div>
                   </div>
                 )}
 
                 {/* Market Data */}
                 {(game.volume || game.movement || game.sharpBooks) && (
-                  <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="grid grid-cols-3 gap-3 mb-4 text-sm">
                     {game.volume && (
                       <div>
-                        <p className="text-slate-400">Volume</p>
-                        <p className="text-green-400 font-bold">
+                        <p className="text-gray-600 font-medium">Volume</p>
+                        <p className="text-green-600 font-bold">
                           ${(game.volume / 1000).toFixed(0)}k
                         </p>
                       </div>
                     )}
                     {game.movement && (
                       <div>
-                        <p className="text-slate-400">Movement</p>
-                        <p className={game.movement.startsWith('+') ? 'text-green-400' : 'text-red-400'}>
+                        <p className="text-gray-600 font-medium">Movement</p>
+                        <p className={game.movement.startsWith('+') ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
                           {game.movement}
                         </p>
                       </div>
                     )}
                     {game.sharpBooks && (
                       <div>
-                        <p className="text-slate-400">Sharp Books</p>
-                        <p className="text-blue-400 font-bold">{game.sharpBooks}/10</p>
+                        <p className="text-gray-600 font-medium">Sharp Books</p>
+                        <p className="text-green-600 font-bold">{game.sharpBooks}/10</p>
                       </div>
                     )}
                   </div>
@@ -231,11 +220,11 @@ const Markets = ({ setAppMenu }) => {
 
                 {/* Signals */}
                 {game.signals && game.signals.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-2">
                     {game.signals.map((signal, idx) => (
                       <span
                         key={idx}
-                        className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded"
+                        className="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-200"
                       >
                         {signal}
                       </span>
