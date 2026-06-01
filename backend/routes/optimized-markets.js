@@ -6,20 +6,12 @@
 const express = require('express');
 const router = express.Router();
 
-// Safely require the service
+// Load the service
 let OptimizedOddsService;
 try {
   OptimizedOddsService = require('../services/optimized-odds-service');
 } catch (error) {
-  console.error('Failed to load OptimizedOddsService:', error.message);
-  // Create a fallback
-  OptimizedOddsService = {
-    getApiStatus: () => ({
-      cache: { keys: 0, stats: {} },
-      dailyEstimate: { requestsPerDay: 0, requestsPerMonth: 0 },
-      recommendations: []
-    })
-  };
+  console.warn('⚠️ OptimizedOddsService not available:', error.message);
 }
 
 /**
@@ -30,7 +22,31 @@ router.get('/live', async (req, res) => {
   try {
     const { sport = 'baseball_mlb' } = req.query;
 
-    // Return demo data while service initializes
+    // Use real service if available
+    if (OptimizedOddsService && OptimizedOddsService.getOddsOptimized) {
+      try {
+        console.log(`📊 Fetching live odds for ${sport}...`);
+        const result = await OptimizedOddsService.getOddsOptimized(sport);
+        
+        return res.json({
+          sport,
+          games: result.games || [],
+          odds: result.odds || {},
+          cached: result.cached || false,
+          cacheExpiry: 300,
+          bookmakers: result.bookmakers || ['draftkings', 'fanduel', 'betmgm'],
+          markets: result.markets || ['h2h', 'spreads', 'totals'],
+          creditsUsed: result.creditsUsed || 1,
+          timestamp: new Date().toISOString(),
+          source: 'live_api',
+        });
+      } catch (serviceError) {
+        console.warn('⚠️ Service error, using fallback:', serviceError.message);
+        // Fall through to demo data
+      }
+    }
+
+    // Fallback: Return demo data while service initializes
     const demoGames = [
       {
         id: 1,
@@ -40,9 +56,22 @@ router.get('/live', async (req, res) => {
         stadium: 'Fenway Park',
         weather: '72°F, Clear',
         odds: {
-          moneyline: { best: -115, book: 'FanDuel' },
-          spread: { best: -2.5, book: 'DraftKings' },
-          total: { best: 8.5, book: 'DraftKings' }
+          moneyline: { away: -115, home: -110, book: 'FanDuel' },
+          spread: { line: -2.5, odds: -110, book: 'DraftKings' },
+          total: { line: 8.5, over: -110, under: -110, book: 'DraftKings' }
+        }
+      },
+      {
+        id: 2,
+        away: 'HOU',
+        home: 'LAA',
+        time: '9:10 PM',
+        stadium: 'Angel Stadium',
+        weather: '78°F, Clear',
+        odds: {
+          moneyline: { away: -120, home: +100, book: 'FanDuel' },
+          spread: { line: -1.5, odds: -110, book: 'DraftKings' },
+          total: { line: 9.0, over: -110, under: -110, book: 'DraftKings' }
         }
       }
     ];
@@ -56,6 +85,8 @@ router.get('/live', async (req, res) => {
       markets: ['h2h', 'spreads', 'totals'],
       creditsUsed: 1,
       timestamp: new Date().toISOString(),
+      source: 'demo_data',
+      message: 'Using demo data - configure API key for live odds'
     });
   } catch (error) {
     console.error('Markets API error:', error);
@@ -72,6 +103,25 @@ router.get('/live', async (req, res) => {
  */
 router.get('/multi-sport', async (req, res) => {
   try {
+    // Use real service if available
+    if (OptimizedOddsService && OptimizedOddsService.getMultipleSportsOdds) {
+      try {
+        console.log('📊 Fetching multi-sport odds...');
+        const result = await OptimizedOddsService.getMultipleSportsOdds();
+        
+        return res.json({
+          results: result,
+          efficiency: 'batched_requests',
+          creditsSaved: 'Single cache key for 3 sports',
+          timestamp: new Date().toISOString(),
+          source: 'live_api',
+        });
+      } catch (serviceError) {
+        console.warn('⚠️ Service error:', serviceError.message);
+      }
+    }
+
+    // Fallback
     res.json({
       results: {
         baseball_mlb: [],
@@ -81,6 +131,7 @@ router.get('/multi-sport', async (req, res) => {
       efficiency: 'batched_requests',
       creditsSaved: 'Single cache key for 3 sports',
       timestamp: new Date().toISOString(),
+      source: 'demo_data',
     });
   } catch (error) {
     console.error('Multi-sport error:', error);
@@ -94,6 +145,41 @@ router.get('/multi-sport', async (req, res) => {
  */
 router.get('/selective', async (req, res) => {
   try {
+    // Use real service if available
+    if (OptimizedOddsService && OptimizedOddsService.getSelectiveOdds) {
+      try {
+        console.log('📊 Fetching selective odds...');
+        const result = await OptimizedOddsService.getSelectiveOdds();
+        
+        return res.json({
+          hotGames: result.hotGames || {
+            refreshRate: '5 minutes',
+            bookmakers: ['draftkings', 'fanduel'],
+            markets: ['h2h'],
+            creditsPerDay: 288
+          },
+          warmGames: result.warmGames || {
+            refreshRate: '30 minutes',
+            bookmakers: ['draftkings', 'fanduel'],
+            markets: ['h2h', 'spreads'],
+            creditsPerDay: 48
+          },
+          coldGames: result.coldGames || {
+            refreshRate: '60 minutes',
+            bookmakers: ['draftkings'],
+            markets: ['h2h'],
+            creditsPerDay: 24
+          },
+          estimatedTotal: '~360 credits/day (sustainable)',
+          timestamp: new Date().toISOString(),
+          source: 'live_api',
+        });
+      } catch (serviceError) {
+        console.warn('⚠️ Service error:', serviceError.message);
+      }
+    }
+
+    // Fallback
     res.json({
       hotGames: {
         refreshRate: '5 minutes',
@@ -115,6 +201,7 @@ router.get('/selective', async (req, res) => {
       },
       estimatedTotal: '~360 credits/day (sustainable)',
       timestamp: new Date().toISOString(),
+      source: 'demo_data',
     });
   } catch (error) {
     console.error('Selective error:', error);
@@ -128,11 +215,13 @@ router.get('/selective', async (req, res) => {
  */
 router.get('/health', (req, res) => {
   try {
-    const status = OptimizedOddsService ? OptimizedOddsService.getApiStatus() : {
-      cache: { keys: 0, stats: { oddsApiRequests: 0, cacheHitRate: '0%' } },
-      dailyEstimate: { requestsPerDay: 288, requestsPerMonth: 8640 },
-      recommendations: ['Service initializing...']
-    };
+    const status = OptimizedOddsService && OptimizedOddsService.getApiStatus 
+      ? OptimizedOddsService.getApiStatus() 
+      : {
+          cache: { keys: 0, stats: { oddsApiRequests: 0, cacheHitRate: '0%' } },
+          dailyEstimate: { requestsPerDay: 288, requestsPerMonth: 8640 },
+          recommendations: ['Service initializing...']
+        };
 
     res.json({
       status: 'HEALTHY',
@@ -164,6 +253,10 @@ router.get('/health', (req, res) => {
 router.post('/refresh', async (req, res) => {
   try {
     const { sport } = req.body;
+
+    if (OptimizedOddsService && OptimizedOddsService.clearCache) {
+      OptimizedOddsService.clearCache();
+    }
 
     res.json({
       message: 'Manual refresh complete',

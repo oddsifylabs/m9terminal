@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 
 const Markets = ({ setAppMenu }) => {
   const [activeMenu, setActiveMenu] = useState('markets');
-  const [selectedSport, setSelectedSport] = useState('ALL');
+  const [selectedSport, setSelectedSport] = useState('baseball_mlb');
   const [searchQuery, setSearchQuery] = useState('');
+  const [markets, setMarkets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [source, setSource] = useState('loading');
 
   const sportLogos = {
     MLB: '⚾',
@@ -14,411 +18,235 @@ const Markets = ({ setAppMenu }) => {
     SOCCER: '⚽'
   };
 
-  const markets = [
-    // MLB Games
-    {
-      id: 1,
-      sport: 'MLB',
-      matchup: 'NYY vs BOS',
-      time: '7:05 PM ET',
-      line: '-1.5',
-      odds: '-110/-110',
-      volume: 1200000,
-      movement: '+0.5',
-      sharpBooks: 8,
-      publicPercent: 72,
-      signals: ['SHARP_MONEY', 'STEAM']
-    },
-    {
-      id: 2,
-      sport: 'MLB',
-      matchup: 'HOU vs SEA',
-      time: '9:10 PM ET',
-      line: '-2.5',
-      odds: '-120/+100',
-      volume: 850000,
-      movement: '-0.5',
-      sharpBooks: 6,
-      publicPercent: 58,
-      signals: ['LINE_VALUE']
-    },
-    {
-      id: 3,
-      sport: 'MLB',
-      matchup: 'LAD vs SD',
-      time: '8:40 PM PT',
-      line: '+1.0',
-      odds: '-105/-115',
-      volume: 650000,
-      movement: '+1.0',
-      sharpBooks: 7,
-      publicPercent: 65,
-      signals: ['VOLUME_ANOMALY']
-    },
-
-    // NBA Games
-    {
-      id: 4,
-      sport: 'NBA',
-      matchup: 'LAL vs GSW',
-      time: '10:00 PM ET',
-      line: '+5.5',
-      odds: '-110/-110',
-      volume: 2100000,
-      movement: '+1.5',
-      sharpBooks: 9,
-      publicPercent: 78,
-      signals: ['STEAM', 'SHARP_MONEY']
-    },
-    {
-      id: 5,
-      sport: 'NBA',
-      matchup: 'MIA vs BOS',
-      time: '7:30 PM ET',
-      line: '+3.0',
-      odds: '-115/+95',
-      volume: 1650000,
-      movement: '+2.0',
-      sharpBooks: 8,
-      publicPercent: 72,
-      signals: ['SHARP_MONEY']
-    },
-    {
-      id: 6,
-      sport: 'NBA',
-      matchup: 'DEN vs LAL',
-      time: '9:00 PM ET',
-      line: '-2.0',
-      odds: '-110/-110',
-      volume: 1200000,
-      movement: '-0.5',
-      sharpBooks: 5,
-      publicPercent: 52,
-      signals: ['LINE_VALUE']
-    },
-
-    // NFL Games
-    {
-      id: 7,
-      sport: 'NFL',
-      matchup: 'KC vs LAC',
-      time: '1:00 PM ET',
-      line: '-3.0',
-      odds: '-160/+140',
-      volume: 3200000,
-      movement: '-0.5',
-      sharpBooks: 9,
-      publicPercent: 68,
-      signals: ['SHARP_MONEY', 'STEAM']
-    },
-    {
-      id: 8,
-      sport: 'NFL',
-      matchup: 'DAL vs PHI',
-      time: '4:25 PM ET',
-      line: '-2.0',
-      odds: '-110/-110',
-      volume: 2800000,
-      movement: '+0.5',
-      sharpBooks: 7,
-      publicPercent: 62,
-      signals: ['VOLUME_ANOMALY']
-    },
-    {
-      id: 9,
-      sport: 'NFL',
-      matchup: 'SF vs SEA',
-      time: '8:20 PM ET',
-      line: '+7.0',
-      odds: '+300/-350',
-      volume: 1900000,
-      movement: '+1.0',
-      sharpBooks: 4,
-      publicPercent: 45,
-      signals: ['LINE_VALUE']
-    },
-
-    // NHL Games
-    {
-      id: 10,
-      sport: 'NHL',
-      matchup: 'NYR vs BOS',
-      time: '7:00 PM ET',
-      line: '-1.5',
-      odds: '-120/+100',
-      volume: 450000,
-      movement: '-0.5',
-      sharpBooks: 5,
-      publicPercent: 55,
-      signals: ['SHARP_MONEY']
-    },
-    {
-      id: 11,
-      sport: 'NHL',
-      matchup: 'LAK vs EDM',
-      time: '10:00 PM ET',
-      line: '+1.0',
-      odds: '-110/-110',
-      volume: 380000,
-      movement: '+0.5',
-      sharpBooks: 4,
-      publicPercent: 52,
-      signals: []
-    },
-
-    // Soccer
-    {
-      id: 12,
-      sport: 'SOCCER',
-      matchup: 'Man City vs Arsenal',
-      time: '3:00 PM GMT',
-      line: '-0.75',
-      odds: '-150/+120',
-      volume: 580000,
-      movement: '-0.25',
-      sharpBooks: 6,
-      publicPercent: 61,
-      signals: ['STEAM']
-    }
+  const sportOptions = [
+    { value: 'baseball_mlb', label: 'MLB', logo: '⚾' },
+    { value: 'basketball_nba', label: 'NBA', logo: '🏀' },
+    { value: 'americanfootball_nfl', label: 'NFL', logo: '🏈' },
+    { value: 'ALL', label: 'All Sports', logo: '🎯' }
   ];
 
-  // Filter markets
-  const filteredMarkets = markets.filter(m => {
-    const sportMatch = selectedSport === 'ALL' || m.sport === selectedSport;
-    const searchMatch = m.matchup.toLowerCase().includes(searchQuery.toLowerCase());
-    return sportMatch && searchMatch;
+  // Fetch live markets data
+  useEffect(() => {
+    const fetchMarkets = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        console.log(`📊 Fetching ${selectedSport} markets...`);
+
+        const response = await fetch(
+          selectedSport === 'ALL'
+            ? '/api/markets/multi-sport'
+            : `/api/markets/live?sport=${selectedSport}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Format the data
+        let formattedMarkets = [];
+        if (selectedSport === 'ALL' && data.results) {
+          // Multi-sport results
+          Object.values(data.results).forEach(sportGames => {
+            if (Array.isArray(sportGames)) {
+              formattedMarkets = [...formattedMarkets, ...sportGames];
+            }
+          });
+        } else if (data.games) {
+          formattedMarkets = data.games;
+        } else if (Array.isArray(data)) {
+          formattedMarkets = data;
+        }
+
+        setMarkets(formattedMarkets);
+        setSource(data.source || 'api');
+
+        console.log(`✅ Loaded ${formattedMarkets.length} games from ${data.source || 'api'}`);
+      } catch (err) {
+        console.error('❌ Error fetching markets:', err);
+        setError(err.message);
+        setMarkets([]); // Clear any old data
+        setSource('error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMarkets();
+    
+    // Refresh every 5 minutes
+    const interval = setInterval(fetchMarkets, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [selectedSport]);
+
+  // Filter markets based on search
+  const filteredMarkets = markets.filter(market => {
+    if (!searchQuery) return true;
+    const matchup = market.matchup || `${market.away || ''} vs ${market.home || ''}`;
+    return matchup.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  // Get signal color
-  const getSignalColor = (signal) => {
-    const colors = {
-      SHARP_MONEY: '#7ED321',
-      STEAM: '#F5A623',
-      LINE_VALUE: '#50E3C2',
-      VOLUME_ANOMALY: '#D946EF'
-    };
-    return colors[signal] || '#999';
-  };
-
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      background: '#0a0a0a',
-      color: '#fff'
-    }}>
-      <Header setAppMenu={setAppMenu} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pb-20">
+      <Header setAppMenu={setAppMenu} title="Markets" icon="📊" />
 
-      <main style={{
-        flex: 1,
-        minHeight: 0,
-        maxWidth: '1400px',
-        margin: '0 auto',
-        padding: '2.5rem 1.5rem',
-        overflowY: 'auto',
-        width: '100%'
-      }}>
-        {/* Page Header */}
-        <div style={{ marginBottom: '2rem' }}>
-          <h1 style={{ margin: '0 0 0.5rem 0', fontSize: '28px', fontWeight: '700' }}>
-            📊 Live Markets
-          </h1>
-          <p style={{ margin: 0, fontSize: '14px', color: '#999' }}>
-            {filteredMarkets.length} games with live odds and signals
-          </p>
+      {/* Sport Selector */}
+      <div className="sticky top-16 z-40 bg-slate-800/90 backdrop-blur border-b border-slate-700 px-4 py-3">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {sportOptions.map(sport => (
+            <button
+              key={sport.value}
+              onClick={() => setSelectedSport(sport.value)}
+              className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                selectedSport === sport.value
+                  ? 'bg-cyan-500 text-slate-900'
+                  : 'bg-slate-700 hover:bg-slate-600'
+              }`}
+            >
+              {sport.logo} {sport.label}
+            </button>
+          ))}
         </div>
 
-        {/* Search & Filter */}
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          marginBottom: '2rem',
-          flexWrap: 'wrap'
-        }}>
-          {/* Search Input */}
-          <input
-            type="text"
-            placeholder="Search teams..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              flex: 1,
-              minWidth: '250px',
-              background: '#1a1a1a',
-              border: '1px solid #333',
-              color: '#fff',
-              padding: '0.75rem 1rem',
-              borderRadius: '6px',
-              fontSize: '14px',
-              outline: 'none'
-            }}
-          />
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Search games..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full mt-3 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:border-cyan-500 focus:outline-none"
+        />
 
-          {/* Sport Filter Buttons */}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            {['ALL', 'MLB', 'NBA', 'NFL', 'NHL', 'SOCCER'].map(sport => (
-              <button
-                key={sport}
-                onClick={() => setSelectedSport(sport)}
-                style={{
-                  background: selectedSport === sport ? '#4A90E2' : '#1a1a1a',
-                  color: '#fff',
-                  border: `1px solid ${selectedSport === sport ? '#4A90E2' : '#333'}`,
-                  padding: '0.5rem 1rem',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {sport !== 'ALL' ? `${sportLogos[sport]} ${sport}` : 'ALL'}
-              </button>
-            ))}
+        {/* Status */}
+        <div className="text-xs text-slate-400 mt-2">
+          {loading ? '⏳ Loading...' : `✅ ${filteredMarkets.length} games · Source: ${source}`}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 py-4">
+        {error && (
+          <div className="bg-red-900/30 border border-red-600 rounded-lg p-4 mb-4">
+            <p className="text-red-200">⚠️ Error: {error}</p>
+            <p className="text-sm text-red-300 mt-1">Showing: Demo data (click refresh to retry)</p>
           </div>
-        </div>
+        )}
 
-        {/* Markets Grid */}
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {filteredMarkets.length === 0 ? (
-            <div style={{
-              textAlign: 'center',
-              padding: '3rem 2rem',
-              color: '#999'
-            }}>
-              <p style={{ fontSize: '16px' }}>No games found matching your filters.</p>
-            </div>
-          ) : (
-            filteredMarkets.map(market => (
+        {loading && markets.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="inline-block animate-spin text-cyan-400 text-3xl">⏳</div>
+            <p className="text-slate-400 mt-3">Loading live markets...</p>
+          </div>
+        ) : filteredMarkets.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-slate-400">No games found</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredMarkets.map((game) => (
               <div
-                key={market.id}
-                style={{
-                  background: '#1a1a1a',
-                  border: '1px solid #333',
-                  borderRadius: '8px',
-                  padding: '1.5rem',
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr 1fr auto',
-                  gap: '1.5rem',
-                  alignItems: 'center'
-                }}
+                key={game.id}
+                className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 hover:border-cyan-500 transition-all"
               >
-                {/* Matchup */}
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '20px' }}>{sportLogos[market.sport]}</span>
-                    <p style={{ margin: 0, fontWeight: '600', fontSize: '15px' }}>
-                      {market.matchup}
+                {/* Matchup Header */}
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="font-bold text-white">
+                      {game.matchup || `${game.away || '?'} vs ${game.home || '?'}`}
+                    </h3>
+                    <p className="text-sm text-slate-400">
+                      {game.time} {game.stadium && `· ${game.stadium}`}
                     </p>
                   </div>
-                  <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>
-                    {market.time}
-                  </p>
                 </div>
 
-                {/* Odds & Line */}
-                <div>
-                  <p style={{ margin: '0 0 0.5rem 0', fontSize: '12px', color: '#999' }}>
-                    SPREAD
-                  </p>
-                  <p style={{ margin: 0, fontWeight: '600', fontSize: '15px' }}>
-                    {market.line}
-                  </p>
-                  <p style={{ margin: '0.25rem 0 0 0', fontSize: '12px', color: '#ddd' }}>
-                    {market.odds}
-                  </p>
-                </div>
-
-                {/* Market Activity */}
-                <div>
-                  <p style={{ margin: '0 0 0.5rem 0', fontSize: '12px', color: '#999' }}>
-                    MARKET
-                  </p>
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div>
-                      <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Volume</p>
-                      <p style={{ margin: '0.25rem 0 0 0', fontWeight: '600', fontSize: '14px' }}>
-                        {(market.volume / 1000000).toFixed(1)}M
+                {/* Odds Section */}
+                {game.odds && (
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {/* Moneyline */}
+                    <div className="bg-slate-800 rounded p-2">
+                      <p className="text-xs text-slate-400">Moneyline</p>
+                      <p className="text-sm font-bold text-cyan-400">
+                        {game.odds.moneyline?.best || game.odds.moneyline?.away || '-'}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {game.odds.moneyline?.book || 'Best'}
                       </p>
                     </div>
-                    <div>
-                      <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Movement</p>
-                      <p style={{
-                        margin: '0.25rem 0 0 0',
-                        fontWeight: '600',
-                        fontSize: '14px',
-                        color: market.movement.includes('+') ? '#7ED321' : '#E74C3C'
-                      }}>
-                        {market.movement.includes('+') ? '↑' : '↓'} {market.movement}
+
+                    {/* Spread */}
+                    <div className="bg-slate-800 rounded p-2">
+                      <p className="text-xs text-slate-400">Spread</p>
+                      <p className="text-sm font-bold text-cyan-400">
+                        {game.odds.spread?.line || game.line || '-'}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {game.odds.spread?.odds ? `${game.odds.spread.odds}` : ''}
+                      </p>
+                    </div>
+
+                    {/* Total */}
+                    <div className="bg-slate-800 rounded p-2">
+                      <p className="text-xs text-slate-400">Total</p>
+                      <p className="text-sm font-bold text-cyan-400">
+                        {game.odds.total?.line || '-'}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        O/U
                       </p>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Market Data */}
+                {(game.volume || game.movement || game.sharpBooks) && (
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    {game.volume && (
+                      <div>
+                        <p className="text-slate-400">Volume</p>
+                        <p className="text-green-400 font-bold">
+                          ${(game.volume / 1000).toFixed(0)}k
+                        </p>
+                      </div>
+                    )}
+                    {game.movement && (
+                      <div>
+                        <p className="text-slate-400">Movement</p>
+                        <p className={game.movement.startsWith('+') ? 'text-green-400' : 'text-red-400'}>
+                          {game.movement}
+                        </p>
+                      </div>
+                    )}
+                    {game.sharpBooks && (
+                      <div>
+                        <p className="text-slate-400">Sharp Books</p>
+                        <p className="text-blue-400 font-bold">{game.sharpBooks}/10</p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Signals */}
-                <div>
-                  <p style={{ margin: '0 0 0.5rem 0', fontSize: '12px', color: '#999' }}>
-                    SIGNALS ({market.signals.length})
-                  </p>
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    {market.signals.length === 0 ? (
-                      <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>—</p>
-                    ) : (
-                      market.signals.slice(0, 2).map(signal => (
-                        <span
-                          key={signal}
-                          style={{
-                            background: getSignalColor(signal),
-                            color: '#000',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '3px',
-                            fontSize: '10px',
-                            fontWeight: '600'
-                          }}
-                        >
-                          {signal.split('_')[0]}
-                        </span>
-                      ))
-                    )}
-                    {market.signals.length > 2 && (
-                      <span style={{
-                        background: '#666',
-                        color: '#fff',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '3px',
-                        fontSize: '10px',
-                        fontWeight: '600'
-                      }}>
-                        +{market.signals.length - 2}
+                {game.signals && game.signals.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1">
+                    {game.signals.map((signal, idx) => (
+                      <span
+                        key={idx}
+                        className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded"
+                      >
+                        {signal}
                       </span>
-                    )}
+                    ))}
                   </div>
-                </div>
-
-                {/* Books Aligned */}
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ margin: '0 0 0.5rem 0', fontSize: '12px', color: '#999' }}>
-                    SHARP BOOKS
-                  </p>
-                  <div style={{
-                    background: '#333',
-                    color: '#fff',
-                    padding: '0.5rem 0.75rem',
-                    borderRadius: '4px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    textAlign: 'center'
-                  }}>
-                    {market.sharpBooks}/10
-                  </div>
-                </div>
+                )}
               </div>
-            ))
-          )}
-        </div>
-      </main>
-
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
