@@ -35,11 +35,11 @@ pool.connect((err, client, release) => {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? '*' : 'http://localhost:3000'),
+  origin: '*', // Allow all origins
   credentials: true,
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Routes - Load with error handling
 try {
@@ -77,13 +77,27 @@ try {
 // Serve React frontend (static files from build folder)
 const path = require('path');
 const frontendBuildPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendBuildPath));
 
-// Rate limiting
+// Log what we're serving
+console.log(`\nServing frontend from: ${frontendBuildPath}`);
+
+// Static file serving with proper cache headers
+app.use(express.static(frontendBuildPath, {
+  maxAge: '1h',
+  etag: false,
+}));
+
+// Favicon fallback (prevent 404s)
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).send(); // No content
+});
+
+// Rate limiting (AFTER static files so static files aren't rate limited)
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: 'Too many requests from this IP, please try again later.',
+  skip: (req) => req.path.startsWith('/static/'), // Don't rate limit static files
 });
 app.use(limiter);
 
@@ -175,7 +189,7 @@ app.get('*', (req, res) => {
 });
 
 // Start server
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n╔════════════════════════════════════════════════════════════╗`);
   console.log(`║                                                            ║`);
   console.log(`║           🎯 M9 TERMINAL — BACKEND SERVER                 ║`);
@@ -184,10 +198,10 @@ const server = app.listen(PORT, () => {
   console.log(`║  Built by Oddsify Labs                                     ║`);
   console.log(`║                                                            ║`);
   console.log(`╚════════════════════════════════════════════════════════════╝\n`);
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}\n`);
-  console.log(`✓ Health check: GET http://localhost:${PORT}/api/health`);
-  console.log(`✓ API root: GET http://localhost:${PORT}/api\n`);
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}\\n`);
+  console.log(`✓ Health check: GET http://localhost:${PORT}/health`);
+  console.log(`✓ API root: GET http://localhost:${PORT}/api\\n`);
 });
 
 // Handle server errors
