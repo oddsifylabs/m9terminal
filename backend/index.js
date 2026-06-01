@@ -17,20 +17,36 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Database pool
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+// Database pool - NON-BLOCKING
+let pool = null;
+if (process.env.DATABASE_URL) {
+  try {
+    pool = new pg.Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000, // 5 second timeout
+    });
 
-// Test database connection
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error('Database connection error:', err.stack);
-  } else {
-    console.log('✓ Database connected');
-    release();
+    // Don't block on connection - just set up error handlers
+    pool.on('error', (err) => {
+      console.error('❌ Pool error:', err.message);
+    });
+
+    // Test connection asynchronously (non-blocking)
+    pool.connect().then((client) => {
+      console.log('✓ Database connected');
+      client.release();
+    }).catch((err) => {
+      console.warn('⚠️ Database connection warning:', err.message);
+      // Don't block startup if DB connection fails
+    });
+  } catch (err) {
+    console.warn('⚠️ Pool creation failed:', err.message);
   }
-});
+} else {
+  console.warn('⚠️ DATABASE_URL not set - running without database');
+}
 
 // Middleware
 app.use(helmet());
