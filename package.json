@@ -9,7 +9,7 @@
     "frontend:dev": "react-scripts start",
     "build": "npm run frontend:build",
     "frontend:build": "cd frontend && npm install && npm run build && cd ..",
-    "start": "node backend/index.js",
+    "start": "node backend/start.js",
     "heroku-postbuild": "npm run build",
     "railway-build": "npm run build",
     "test": "jest",
