@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import Markets from './pages/Markets';
-import BetLog from './pages/BetLog';
-import Bankroll from './pages/Bankroll';
-import DailyDebrief from './pages/DailyDebrief';
-import News from './pages/News';
-import Weather from './pages/Weather';
+import Intel from './pages/Intel';
+import Tracker from './pages/Tracker';
 import Settings from './pages/Settings';
 import BottomNav from './components/BottomNav';
 import './styles/global.css';
@@ -20,16 +17,10 @@ function App() {
         return <Dashboard setAppMenu={setActiveMenu} />;
       case 'markets':
         return <Markets setAppMenu={setActiveMenu} />;
-      case 'betlog':
-        return <BetLog setActiveMenu={setActiveMenu} />;
-      case 'bankroll':
-        return <Bankroll setActiveMenu={setActiveMenu} />;
-      case 'daily':
-        return <DailyDebrief setActiveMenu={setActiveMenu} />;
-      case 'news':
-        return <News setActiveMenu={setActiveMenu} />;
-      case 'weather':
-        return <Weather setActiveMenu={setActiveMenu} />;
+      case 'intel':
+        return <Intel setActiveMenu={setActiveMenu} />;
+      case 'tracker':
+        return <Tracker setActiveMenu={setActiveMenu} />;
       case 'settings':
         return <Settings setActiveMenu={setActiveMenu} />;
       default:
@@ -45,7 +36,7 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        backgroundColor: '#0F1115',
+        backgroundColor: '#ffffff',
         flex: 1,
       }}
     >

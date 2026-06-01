@@ -3,25 +3,22 @@ import React from 'react';
 const BottomNav = ({ activeMenu, setActiveMenu }) => {
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'markets', label: 'Markets' },
-    { id: 'betlog', label: 'Bet Log' },
-    { id: 'bankroll', label: 'Bankroll' },
-    { id: 'daily', label: 'Daily Debrief' },
-    { id: 'news', label: 'News' },
-    { id: 'weather', label: 'Weather' },
+    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'markets', label: 'Markets', icon: '⚾' },
+    { id: 'intel', label: 'Intel', icon: '🔍' },
+    { id: 'tracker', label: 'Tracker', icon: '📈' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
   return (
     <nav style={{
-      background: '#0a0a0a',
-      backdropFilter: 'blur(10px)',
-      borderTop: '1px solid #1a1a1a',
-      padding: '1rem',
+      background: '#ffffff',
+      borderTop: '1px solid #e5e7eb',
+      padding: '0.75rem 1rem',
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'space-around',
       alignItems: 'center',
-      gap: '2rem',
+      gap: '0.5rem',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       flexShrink: 0,
     }}>
@@ -32,28 +29,35 @@ const BottomNav = ({ activeMenu, setActiveMenu }) => {
           style={{
             background: 'none',
             border: 'none',
-            color: activeMenu === item.id ? '#8FDC23' : '#808080',
-            fontSize: '12px',
+            color: activeMenu === item.id ? '#16a34a' : '#6b7280',
+            fontSize: '11px',
             fontWeight: activeMenu === item.id ? '700' : '600',
             cursor: 'pointer',
-            padding: '8px 0',
+            padding: '8px 12px',
             transition: 'all 0.2s ease',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            borderBottom: activeMenu === item.id ? '2px solid #8FDC23' : 'none',
+            borderRadius: '6px',
+            backgroundColor: activeMenu === item.id ? '#f0fdf4' : 'transparent',
             paddingBottom: activeMenu === item.id ? '6px' : '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '4px',
           }}
           onMouseEnter={(e) => {
             if (activeMenu !== item.id) {
-              e.target.style.color = '#ffffff';
+              e.target.style.color = '#374151';
             }
           }}
           onMouseLeave={(e) => {
             if (activeMenu !== item.id) {
-              e.target.style.color = '#808080';
+              e.target.style.color = '#6b7280';
             }
           }}
+          title={item.label}
         >
+          <span style={{ fontSize: '18px' }}>{item.icon}</span>
           {item.label}
         </button>
       ))}
