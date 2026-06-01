@@ -31,6 +31,8 @@
     "bcryptjs": "^2.4.3",
     "express-rate-limit": "^7.1.5",
     "axios": "^1.6.2",
+    "node-cache": "^5.1.2",
+    "crypto": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.10.3",
