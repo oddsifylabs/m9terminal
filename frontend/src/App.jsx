@@ -9,6 +9,7 @@ import Weather from './pages/Weather';
 import Settings from './pages/Settings';
 import BottomNav from './components/BottomNav';
 import './styles/global.css';
+import './styles/responsive.css';
 
 function App() {
   const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -16,29 +17,41 @@ function App() {
   const renderPage = () => {
     switch (activeMenu) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard setAppMenu={setActiveMenu} />;
       case 'markets':
-        return <Markets />;
+        return <Markets setAppMenu={setActiveMenu} />;
       case 'betlog':
-        return <BetLog />;
+        return <BetLog setActiveMenu={setActiveMenu} />;
       case 'bankroll':
-        return <Bankroll />;
+        return <Bankroll setActiveMenu={setActiveMenu} />;
       case 'daily':
-        return <DailyDebrief />;
+        return <DailyDebrief setActiveMenu={setActiveMenu} />;
       case 'news':
-        return <News />;
+        return <News setActiveMenu={setActiveMenu} />;
       case 'weather':
-        return <Weather />;
+        return <Weather setActiveMenu={setActiveMenu} />;
       case 'settings':
-        return <Settings />;
+        return <Settings setActiveMenu={setActiveMenu} />;
       default:
-        return <Dashboard />;
+        return <Dashboard setAppMenu={setActiveMenu} />;
     }
   };
 
   return (
-    <div className="antialiased" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {renderPage()}
+    <div
+      style={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        backgroundColor: '#0F1115',
+        flex: 1,
+      }}
+    >
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0, height: '100%' }}>
+        {renderPage()}
+      </div>
       <BottomNav activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
     </div>
   );

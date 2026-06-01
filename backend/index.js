@@ -43,7 +43,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 const mlbLiveRoutes = require('./routes/mlb-live');
+const optimizedMarketsRoutes = require('./routes/optimized-markets');
+const engineRoutes = require('./routes/engine');
+const claudeRoutes = require('./routes/claude');
 app.use('/api/mlb', mlbLiveRoutes);
+app.use('/api/markets', optimizedMarketsRoutes);
+app.use('/api/engine', engineRoutes);
+app.use('/api', claudeRoutes);
 
 // Rate limiting
 const limiter = rateLimit({

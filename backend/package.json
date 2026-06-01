@@ -1,0 +1,28 @@
+{
+  "name": "m9-terminal-backend",
+  "version": "1.0.0",
+  "description": "M9 Terminal - Sports Market Intelligence Platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "keywords": ["sports", "betting", "market", "intelligence"],
+  "author": "Oddsify Labs",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.7.0",
+    "dotenv": "^16.0.3",
+    "pg": "^8.10.0",
+    "jsonwebtoken": "^9.0.2",
+    "axios": "^1.4.0",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

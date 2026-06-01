@@ -1,101 +1,169 @@
 /**
- * M9 Terminal API Integration Service
- * Connects frontend to backend live data pipeline
+ * M9 Terminal API Service
+ * Handles all API calls to backend
  */
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3009/api';
 
-export class M9TerminalAPI {
+class M9TerminalAPI {
+  constructor() {
+    this.baseURL = API_BASE_URL;
+  }
+
   /**
-   * Fetch today's live signals
-   * Returns: { success, signals[], timestamp, dataQuality }
+   * Analyze today's games with real data
+   * @param {string} profile - SHARP, ACTIVE, or RESEARCH
+   * @returns {Promise} Games with real odds, signals, and analysis
    */
-  static async getLiveSignals() {
+  async analyzeTodayGames(profile = 'SHARP') {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/mlb/analyze-today`, {
-        method: 'POST',
+      const response = await fetch(`${this.baseURL}/mlb/today?profile=${profile}`, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          profile: 'ACTIVE',
-          date: new Date().toISOString().split('T')[0]
-        })
       });
 
       if (!response.ok) {
-        console.error('API error:', response.status);
-        return { success: false, signals: [], error: 'Failed to fetch signals' };
+        throw new Error(`HTTP ${response.status}`);
       }
 
-      const data = await response.json();
-      return {
-        success: data.success,
-        signals: data.games || [],
-        timestamp: new Date(),
-        dataQuality: 'LIVE',
-        gamesAnalyzed: data.gamesAnalyzed,
-        summary: data.summary,
-        dataSources: data.dataSources
-      };
+      return await response.json();
     } catch (error) {
-      console.error('Signal fetch error:', error);
-      return { success: false, signals: [], error: error.message };
+      console.error('Error analyzing games:', error);
+      return {
+        success: false,
+        error: error.message,
+        games: [],
+      };
     }
   }
 
   /**
-   * Run integration test
-   * Verifies all APIs are working
+   * Get current odds for a specific game
+   * @param {string} gameId - SportsData game ID
+   * @returns {Promise} Odds from all sportsbooks
    */
-  static async runIntegrationTest() {
+  async getGameOdds(gameId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/mlb/integration-test`, {
-        method: 'GET'
+      const response = await fetch(`${this.baseURL}/odds/game/${gameId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      const data = await response.json();
-      return data;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Integration test error:', error);
+      console.error('Error fetching odds:', error);
       return { success: false, error: error.message };
     }
   }
 
   /**
-   * Analyze specific game with Claude AI
+   * Get sharp action signals
+   * @returns {Promise} Recent sharp action signals
    */
-  static async analyzeGame(gameId) {
+  async getSharpAction() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/mlb/analyze-game`, {
+      const response = await fetch(`${this.baseURL}/signals/sharp-action`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching sharp action:', error);
+      return { success: false, error: error.message, signals: [] };
+    }
+  }
+
+  /**
+   * Get game analysis from Claude
+   * @param {string} gameId - Game ID
+   * @returns {Promise} AI-powered game analysis
+   */
+  async analyzeGame(gameId) {
+    try {
+      const response = await fetch(`${this.baseURL}/analyze-game`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ gameId })
+        body: JSON.stringify({ gameId }),
       });
 
-      const data = await response.json();
-      return data;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Game analysis error:', error);
+      console.error('Error analyzing game:', error);
       return { success: false, error: error.message };
     }
   }
 
   /**
-   * Get health check
+   * Get odds movement/line changes
+   * @param {string} gameId - Game ID
+   * @returns {Promise} Odds movement history
    */
-  static async getHealth() {
+  async getOddsMovement(gameId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/health`);
-      const data = await response.json();
-      return data;
+      const response = await fetch(`${this.baseURL}/odds/movement/${gameId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Health check error:', error);
-      return { status: 'error', error: error.message };
+      console.error('Error fetching odds movement:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Get health status of API
+   * @returns {Promise} API health status
+   */
+  async health() {
+    try {
+      const response = await fetch(`${this.baseURL}/health`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error checking health:', error);
+      return { success: false, error: error.message };
     }
   }
 }
 
+// Export singleton instance
+export const api = new M9TerminalAPI();
 export default M9TerminalAPI;
